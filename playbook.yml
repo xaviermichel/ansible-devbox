@@ -1,0 +1,29 @@
+# vi: set ft=ansible :
+
+- hosts: commons
+  tags:
+    - common
+  roles:
+    - { role: packages_install_and_upgrade, tags: [ 'apt' ] }
+    - { role: install_dotfiles, tags: [ 'dotfiles' ], become: yes, become_user: "{{ user }}" }
+
+- hosts: vbox
+  tags:
+     - vbox
+  roles:
+     - { role: vbox_finish_install, tags: [ 'vbox' ] }
+
+- hosts: devtools
+  tags:
+    - devtools
+  roles:
+    - { role: install_docker, tags: [ 'docker' ], environment: "{{ proxy_env }}" }
+    - { role: install_node, tags: [ 'node' ], become: yes, become_user: "{{ user }}", environment: "{{ proxy_env }}" }
+
+- hosts: not-headless-devtools
+  tags:
+    - not-headless-devtools
+  roles:
+    - { role: not_headless_devtools_install, tags: [ 'not_headless_devtools' ], environment: "{{ proxy_env }}"  }
+
+

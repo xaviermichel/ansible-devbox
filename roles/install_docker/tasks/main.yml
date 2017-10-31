@@ -1,0 +1,38 @@
+- name: Updating cache before installing requirements
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install requirements
+  apt: name={{ item }} state=present
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+
+- name: Add Docker's official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Check if repo file already exists
+  stat:
+    path: /etc/apt/sources.list.d/docker.list
+  register:
+    repo_file
+
+- name: Fill deb repo
+  shell: >
+    echo "deb [arch={{ docker_arch }}] https://download.docker.com/linux/ubuntu "$(lsb_release -cs)" stable" | tee -a /etc/apt/sources.list.d/docker.list
+  when: repo_file.stat.exists is defined and repo_file.stat.exists == False
+
+- name: Install docker
+  apt: name=docker-ce state=present update_cache=yes
+
+- name: Adding user {{ user }} to group docker
+  user:
+    name: "{{ user }}"
+    groups: docker
+    append: yes
+

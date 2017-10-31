@@ -1,0 +1,31 @@
+- name: Update cache before install
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+
+- name: Install requirements and tools packages
+  apt: name={{ item }} state=present
+  with_items:
+  - git
+  - jq
+  - htop
+  - dfc
+  - vim
+  - zsh
+  - tmux
+  - byobu
+  - zip
+  - unzip
+  - bzip2
+  - fontconfig
+  - curl
+  - fail2ban
+  - software-properties-common
+  - python-setuptools
+
+- name: Upgrade all packages
+  apt:
+    upgrade: yes
+
+

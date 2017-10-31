@@ -1,0 +1,40 @@
+[headless-server]
+; cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=root
+
+[headless-server:vars]
+user=xavier
+node_version=node-v6.11.2
+node_arch=armv7l
+docker_arch=armhf
+proxy_env={}
+
+[vbox-devbox]
+; devbox		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
+devbox2		ansible_host=127.0.0.1	ansible_port=1923	ansible_user=root
+
+[vbox-devbox:vars]
+user=xavier
+node_version=v6.11.1
+node_arch=x64
+docker_arch=amd64
+; proxy_env={'https_proxy': 'http://proxy.priv.atos.fr:3128'}
+proxy_env={}
+
+; commons packages
+[commons:children]
+headless-server
+vbox-devbox
+
+; only dev tools (node, ...)
+[devtools:children]
+headless-server
+vbox-devbox
+
+; Devtools which require UI
+[not-headless-devtools:children]
+vbox-devbox
+
+; virtualbox add ons
+[vbox:children]
+vbox-devbox
+

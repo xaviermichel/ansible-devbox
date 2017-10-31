@@ -1,0 +1,66 @@
+- name: Creating /home/{{ user }}/bin/ directory
+  file: path=/home/{{ user }}/bin state=directory
+
+- name: Check if node already exists
+  stat:
+    path: /home/{{ user }}/bin/node
+  register:
+    node_bin
+
+- name: Downloading node {{ node_version }} for arch {{ node_arch }}
+  get_url:
+    url: https://nodejs.org/dist/{{ node_version }}/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
+    dest: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
+  when: node_bin.stat.islnk is not defined
+
+# manually done because of https://github.com/ansible/ansible-modules-core/issues/2936
+- name: Extracting node directory
+  unarchive:
+    remote_src: yes
+    src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
+    dest: /home/{{ user }}/bin
+#  shell: >
+#  tar xf /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz --directory /home/{{ user }}/bin
+  when: node_bin.stat.islnk is not defined
+
+- name: Creating symlinks for node-linux-{{ node_arch }}
+  file:
+    src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}
+    dest: /home/{{ user }}/bin/node-linux-{{ node_arch }}
+    state: link
+
+- name: Creating symlinks for node
+  file:
+    src: /home/{{ user }}/bin/node-linux-{{ node_arch }}/bin/node
+    dest: /home/{{ user }}/bin/node
+    state: link
+
+- name: Creating symlinks for npm
+  file:
+    src: /home/{{ user }}/bin/node-linux-{{ node_arch }}/bin/npm
+    dest: /home/{{ user }}/bin/npm
+    state: link
+
+- block:
+  - name: Installing node usefull packages
+    npm:
+      name: "{{ item }}"
+      global: yes
+    with_items:
+      - bower
+      - gulp
+      - http-server
+      - yarn
+  - name: Link installed package
+    file:
+      src: /home/{{ user }}/bin/node-linux-{{ node_arch }}/bin/{{ item }}
+      dest: /home/{{ user }}/bin/{{ item }}
+      state: link
+    with_items:
+      - bower
+      - gulp
+      - http-server
+      - yarn
+  environment:
+    - PATH: ${PATH}:/home/{{ user }}/bin
+

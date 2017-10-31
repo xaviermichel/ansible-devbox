@@ -1,0 +1,44 @@
+- name: Clone oh-my-zsh repository
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: /home/{{ user }}/.oh-my-zsh
+
+- name: Check if .zshrc file already exists
+  stat:
+    path: /home/{{ user }}/.zshrc
+  register:
+    zshrc_file
+
+- name: Copy .zshrc
+  copy:
+    remote_src: True
+    src: /home/{{ user }}/.oh-my-zsh/templates/zshrc.zsh-template
+    dest: /home/{{ user }}/.zshrc
+  when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
+
+- name: Cloning my dotfiles
+  git:
+    repo: 'https://github.com/xaviermichel/dotfiles.git'
+    dest: /home/{{ user }}/.dotfiles
+
+- name: Bootstrap dotfiles
+  shell: >
+    cd /home/{{ user }}/.dotfiles
+    script/bootstrap
+
+- name: Downloading custom theme
+  get_url:
+    url: https://gist.githubusercontent.com/xaviermichel/5635753/raw/4dfe840aa7f57e6828242c860ecc5b614124bb23/simple.zsh-theme
+    dest: /home/{{ user }}/.oh-my-zsh/themes/simple.zsh-theme
+
+- name: Configuring default theme
+  replace:
+    path: /home/{{ user }}/.zshrc
+    regexp: 'ZSH_THEME=".*"'
+    replace: 'ZSH_THEME="simple"'
+
+- name: Updating {{ user }} default shell
+  user: name="{{ user }}" shell=/bin/zsh
+  become: yes
+  become_user: root
+

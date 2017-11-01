@@ -1,3 +1,6 @@
+Ansible provisionner for my servers
+===================================
+
 How to provision my devbox
 --------------------------
 
@@ -11,8 +14,9 @@ How to provision run script
 
 Play all the playbook :
 ```bash
-ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts playbook.yml
+ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts playbook.yml --ask-vault
 ```
+Vault may be required because some personnal configurations are encryted.
 
 Or play a specific task by using tag :
 ```
@@ -21,6 +25,12 @@ ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts playbook.yml -t node
 
 How to provision devm
 ---------------------
+
+*From local network*
+
+Just adapt the `hosts` file and run provisionning command.
+
+*Using reverse SSH*
 
 This section is a bit tricky because I want my home server to provision my work station, which is not public.
 I assume that you already generate an ssh keypair for ansible. The private key is stored in `~/.ssh/id_INSECURE_DEVM_ANSIBLE_KEY` on home server.
@@ -45,9 +55,10 @@ Host home
 	ProxyCommand /usr/bin/connect-proxy -H proxy.fr:3128 %h %p
 ```
 
-
 On ansible server, you can now access to devm :
 ```bash
 ssh -i $HOME/.ssh/id_INSECURE_DEVM_ANSIBLE_KEY root@127.0.0.1 -p 1922
 ```
+
+You may now wan't to remove the key added in `/root/.ssh/authorized_keys`.
 

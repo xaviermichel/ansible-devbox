@@ -1,40 +1,54 @@
-[headless-server]
+[home-server]
 ; cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=root
-
-[headless-server:vars]
+[home-server:vars]
 user=xavier
 node_version=node-v6.11.2
 node_arch=armv7l
 docker_arch=armhf
 proxy_env={}
 
-[vbox-devbox]
-; devbox		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
-devbox2		ansible_host=127.0.0.1	ansible_port=1923	ansible_user=root
 
-[vbox-devbox:vars]
+[devbox-server-work]
+; devbox-work		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
+[devbox-server-work:vars]
+proxy_env={'https_proxy': 'http://proxy.priv.atos.fr:3128'}
+
+[devbox-server-home]
+devbox-home		ansible_host=192.168.1.17	ansible_user=root
+[devbox-server-home:vars]
+proxy_env={}
+
+[devbox-server:children]
+devbox-server-home
+devbox-server-work
+[devbox-server:vars]
 user=xavier
 node_version=v6.11.1
 node_arch=x64
 docker_arch=amd64
-; proxy_env={'https_proxy': 'http://proxy.priv.atos.fr:3128'}
-proxy_env={}
+terraform_version=0.10.8
+intellij_version=2017.2.5
+intellij_extracted_name=172.4343.14
 
 ; commons packages
 [commons:children]
-headless-server
-vbox-devbox
+home-server
+devbox-server
 
 ; only dev tools (node, ...)
-[devtools:children]
-headless-server
-vbox-devbox
+[devbox:children]
+home-server
+devbox-server
 
 ; Devtools which require UI
-[not-headless-devtools:children]
-vbox-devbox
+[not-headless-devbox:children]
+devbox-server
 
 ; virtualbox add ons
 [vbox:children]
-vbox-devbox
+devbox-server
+
+; tools only for work
+[work:children]
+devbox-server-work
 

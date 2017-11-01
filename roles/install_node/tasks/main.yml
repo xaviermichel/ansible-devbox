@@ -13,15 +13,17 @@
     dest: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
   when: node_bin.stat.islnk is not defined
 
-# manually done because of https://github.com/ansible/ansible-modules-core/issues/2936
 - name: Extracting node directory
   unarchive:
     remote_src: yes
     src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
     dest: /home/{{ user }}/bin
-#  shell: >
-#  tar xf /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz --directory /home/{{ user }}/bin
   when: node_bin.stat.islnk is not defined
+
+- name: Remove downloaded zip
+  file:
+    state: absent
+    path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
 
 - name: Creating symlinks for node-linux-{{ node_arch }}
   file:

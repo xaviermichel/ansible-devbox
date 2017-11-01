@@ -1,0 +1,35 @@
+- name: Clone oh-my-zsh repository
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: /home/{{ user }}/.oh-my-zsh
+
+- name: Check if .zshrc file already exists
+  stat:
+    path: /home/{{ user }}/.zshrc
+  register:
+    zshrc_file
+
+- name: Downloading oh-my-zsh installer
+  get_url:
+    url: https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+    dest: /tmp/install.sh
+    mode: u+rwx
+  when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
+
+- name: Bootstrap oh-my-zsh
+  shell: >
+    /tmp/install.sh
+  when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
+
+- name: Copy .zshrc
+  copy:
+    remote_src: True
+    src: /home/{{ user }}/.oh-my-zsh/templates/zshrc.zsh-template
+    dest: /home/{{ user }}/.zshrc
+  when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
+
+- name: Updating {{ user }} default shell
+  user: name="{{ user }}" shell=/bin/zsh
+  become: yes
+  become_user: root
+

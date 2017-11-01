@@ -1,0 +1,46 @@
+- name: Cloning my dotfiles
+  git:
+    repo: 'https://github.com/xaviermichel/dotfiles.git'
+    dest: /home/{{ user }}/.dotfiles
+
+- name: Bootstrap dotfiles
+  shell: script/bootstrap
+  args:
+    chdir: /home/{{ user }}/.dotfiles
+
+- name: Downloading custom theme
+  get_url:
+    url: https://gist.githubusercontent.com/xaviermichel/5635753/raw/4dfe840aa7f57e6828242c860ecc5b614124bb23/simple.zsh-theme
+    dest: /home/{{ user }}/.oh-my-zsh/themes/simple.zsh-theme
+
+- name: Configuring default theme
+  replace:
+    path: /home/{{ user }}/.zshrc
+    regexp: 'ZSH_THEME=".*"'
+    replace: 'ZSH_THEME="simple"'
+
+
+- name: Ensures "/home/{{ user }}/.vim/autoload" dir exists
+  file: path=/home/{{ user }}/.vim/autoload state=directory
+
+- name: Install vim plugin manager
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: /home/{{ user }}/.vim/autoload/plug.vim
+
+
+- name: Creating /home/{{ user }}/.ssh directory
+  file: path=/home/{{ user }}/.ssh state=directory
+
+- name: Check if ssh config already exists
+  stat:
+    path: /home/{{ user }}/.ssh/config
+  register:
+    ssh_config
+
+- name: Copy local home ssh conf
+  copy:
+    src: ssh/home_local_config
+    dest: /home/{{ user }}/.ssh/config
+  when: ssh_config.stat.exists is defined and ssh_config.stat.exists == False and 'devbox-server-home' in group_names
+

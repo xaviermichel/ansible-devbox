@@ -5,25 +5,44 @@
     - common
   roles:
     - { role: packages_install_and_upgrade, tags: [ 'apt' ] }
-    - { role: install_dotfiles, tags: [ 'dotfiles' ], become: yes, become_user: "{{ user }}" }
+    - { role: install_oh_my_zsh, tags: [ 'oh-my-zsh' ], become: yes, become_user: "{{ user }}" }
+    - { role: install_my_dotfiles, tags: [ 'dotfiles' ], become: yes, become_user: "{{ user }}" }
+  environment:
+    - "{{ proxy_env }}"
 
 - hosts: vbox
   tags:
-     - vbox
+    - vbox
   roles:
-     - { role: vbox_finish_install, tags: [ 'vbox' ] }
+    - { role: vbox_finish_install, tags: [ 'vbox' ] }
+  environment:
+    - "{{ proxy_env }}"
 
-- hosts: devtools
+- hosts: devbox
   tags:
-    - devtools
+    - devbox
   roles:
-    - { role: install_docker, tags: [ 'docker' ], environment: "{{ proxy_env }}" }
-    - { role: install_node, tags: [ 'node' ], become: yes, become_user: "{{ user }}", environment: "{{ proxy_env }}" }
+    - { role: install_docker, tags: [ 'docker' ] }
+    - { role: install_node, tags: [ 'node' ], become: yes, become_user: "{{ user }}" }
+    - { role: install_java, tags: [ 'java' ] }
+  environment:
+    - "{{ proxy_env }}"
 
-- hosts: not-headless-devtools
+- hosts: not-headless-devbox
   tags:
-    - not-headless-devtools
+    - not-headless-devbox
   roles:
-    - { role: not_headless_devtools_install, tags: [ 'not_headless_devtools' ], environment: "{{ proxy_env }}"  }
+    - { role: install_ui_tools, tags: [ 'uitools' ] }
+    - { role: install_sublimetext, tags: [ 'sublimetext' ] }
+    - { role: install_intellij, tags: [ 'intellij' ], become: yes, become_user: "{{ user }}" }
+  environment:
+    - "{{ proxy_env }}"
 
+- hosts: work
+  tags:
+    - work
+  roles:
+    - { role: install_terraform, tags: [ 'terraform' ], become: yes, become_user: "{{ user }}" }
+  environment:
+    - "{{ proxy_env }}"
 

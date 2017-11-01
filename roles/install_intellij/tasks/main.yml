@@ -1,0 +1,33 @@
+- name: Creating /home/{{ user }}/bin/ directory
+  file: path=/home/{{ user }}/bin state=directory
+
+- name: Check if intellij idea already exists
+  stat:
+    path: /home/{{ user }}/bin/idea.sh
+  register:
+    intellij_bin
+
+- name: Downloading intellij idea {{ intellij_version }}
+  get_url:
+    url: https://download.jetbrains.com/idea/ideaIC-{{ intellij_version }}.tar.gz
+    dest: /home/{{ user }}/bin/ideaIC-{{ intellij_version }}.tar.gz
+  when: intellij_bin.stat.islnk is not defined
+
+- name: Extracting intellij idea
+  unarchive:
+    remote_src: yes
+    src: /home/{{ user }}/bin/ideaIC-{{ intellij_version }}.tar.gz
+    dest: /home/{{ user }}/bin
+  when: intellij_bin.stat.islnk is not defined
+
+- name: Removing downloaded zip
+  file:
+    state: absent
+    path: /home/{{ user }}/bin/ideaIC-{{ intellij_version }}.tar.gz
+
+- name: Creating symlinks for node-linux-{{ node_arch }}
+  file:
+    src: /home/{{ user }}/bin/idea-IC-{{ intellij_extracted_name }}/bin/idea.sh
+    dest: /home/{{ user }}/bin/idea.sh
+    state: link
+

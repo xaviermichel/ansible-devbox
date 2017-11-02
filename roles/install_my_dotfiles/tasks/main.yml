@@ -10,7 +10,7 @@
 
 - name: Downloading custom theme
   get_url:
-    url: https://gist.githubusercontent.com/xaviermichel/5635753/raw/4dfe840aa7f57e6828242c860ecc5b614124bb23/simple.zsh-theme
+    url: https://gist.githubusercontent.com/xaviermichel/5635753/raw/simple.zsh-theme
     dest: /home/{{ user }}/.oh-my-zsh/themes/xavier-simple.zsh-theme
 
 - name: Configuring default theme

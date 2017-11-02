@@ -9,12 +9,12 @@ proxy_env={}
 
 
 [devbox-server-work]
-; devbox-work		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
+devbox-work		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
 [devbox-server-work:vars]
 proxy_env={'https_proxy': 'http://proxy.priv.atos.fr:3128'}
 
 [devbox-server-home]
-devbox-home		ansible_host=192.168.1.17	ansible_user=root
+; devbox-home		ansible_host=192.168.1.17	ansible_user=root
 [devbox-server-home:vars]
 proxy_env={}
 

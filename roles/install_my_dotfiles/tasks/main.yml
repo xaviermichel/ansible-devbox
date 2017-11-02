@@ -11,13 +11,13 @@
 - name: Downloading custom theme
   get_url:
     url: https://gist.githubusercontent.com/xaviermichel/5635753/raw/4dfe840aa7f57e6828242c860ecc5b614124bb23/simple.zsh-theme
-    dest: /home/{{ user }}/.oh-my-zsh/themes/simple.zsh-theme
+    dest: /home/{{ user }}/.oh-my-zsh/themes/xavier-simple.zsh-theme
 
 - name: Configuring default theme
   replace:
     path: /home/{{ user }}/.zshrc
     regexp: 'ZSH_THEME=".*"'
-    replace: 'ZSH_THEME="simple"'
+    replace: 'ZSH_THEME="xavier-simple"'
 
 
 - name: Ensures "/home/{{ user }}/.vim/autoload" dir exists
@@ -43,4 +43,5 @@
     src: ssh/home_local_config
     dest: /home/{{ user }}/.ssh/config
   when: ssh_config.stat.exists is defined and ssh_config.stat.exists == False and 'devbox-server-home' in group_names
+
 

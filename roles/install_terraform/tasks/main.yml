@@ -11,6 +11,7 @@
   get_url:
     url: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
     dest: /home/{{ user }}/bin/terraform_{{ terraform_version }}_linux_amd64.zip
+    validate_certs: no
   when: terraform_bin.stat.exists is defined and terraform_bin.stat.exists == False
 
 - name: Extracting terraform

@@ -27,19 +27,19 @@
 
 - name: Creating symlinks for node-linux-{{ node_arch }}
   file:
-    src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}
+    src: node-{{ node_version }}-linux-{{ node_arch }}
     dest: /home/{{ user }}/bin/node-linux-{{ node_arch }}
     state: link
 
 - name: Creating symlinks for node
   file:
-    src: /home/{{ user }}/bin/node-linux-{{ node_arch }}/bin/node
+    src: node-linux-{{ node_arch }}/bin/node
     dest: /home/{{ user }}/bin/node
     state: link
 
 - name: Creating symlinks for npm
   file:
-    src: /home/{{ user }}/bin/node-linux-{{ node_arch }}/bin/npm
+    src: node-linux-{{ node_arch }}/bin/npm
     dest: /home/{{ user }}/bin/npm
     state: link
 
@@ -55,7 +55,7 @@
       - yarn
   - name: Link installed package
     file:
-      src: /home/{{ user }}/bin/node-linux-{{ node_arch }}/bin/{{ item }}
+      src: node-linux-{{ node_arch }}/bin/{{ item }}
       dest: /home/{{ user }}/bin/{{ item }}
       state: link
     with_items:

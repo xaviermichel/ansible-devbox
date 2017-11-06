@@ -1,9 +1,9 @@
 - name: Creating /home/{{ user }}/bin/ directory
   file: path=/home/{{ user }}/bin state=directory
 
-- name: Check if node already exists
+- name: Check if node {{ node_version }} already exists
   stat:
-    path: /home/{{ user }}/bin/node
+    path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}/bin/node
   register:
     node_bin
 
@@ -11,14 +11,14 @@
   get_url:
     url: https://nodejs.org/dist/{{ node_version }}/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
     dest: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
-  when: node_bin.stat.islnk is not defined
+  when: node_bin.stat.exists is defined and node_bin.stat.exists == False
 
 - name: Extracting node directory
   unarchive:
     remote_src: yes
     src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
     dest: /home/{{ user }}/bin
-  when: node_bin.stat.islnk is not defined
+  when: node_bin.stat.exists is defined and node_bin.stat.exists == False
 
 - name: Remove downloaded zip
   file:
@@ -28,18 +28,18 @@
 - name: Creating symlinks for node-linux-{{ node_arch }}
   file:
     src: node-{{ node_version }}-linux-{{ node_arch }}
-    dest: /home/{{ user }}/bin/node-linux-{{ node_arch }}
+    dest: /home/{{ user }}/bin/node-linux
     state: link
 
 - name: Creating symlinks for node
   file:
-    src: node-linux-{{ node_arch }}/bin/node
+    src: node-linux/bin/node
     dest: /home/{{ user }}/bin/node
     state: link
 
 - name: Creating symlinks for npm
   file:
-    src: node-linux-{{ node_arch }}/bin/npm
+    src: node-linux/bin/npm
     dest: /home/{{ user }}/bin/npm
     state: link
 
@@ -53,9 +53,10 @@
       - gulp
       - http-server
       - yarn
+      - casperjs
   - name: Link installed package
     file:
-      src: node-linux-{{ node_arch }}/bin/{{ item }}
+      src: node-linux/bin/{{ item }}
       dest: /home/{{ user }}/bin/{{ item }}
       state: link
     with_items:
@@ -63,6 +64,7 @@
       - gulp
       - http-server
       - yarn
+      - casperjs
   environment:
     - PATH: ${PATH}:/home/{{ user }}/bin
 

@@ -20,6 +20,7 @@
   - fontconfig
   - curl
   - fail2ban
+  - ccze
 
 - name: Upgrade all packages
   apt:

@@ -27,8 +27,9 @@ node_version=v8.9.0
 node_arch=x64
 docker_arch=amd64
 terraform_version=0.10.8
-intellij_version=2017.2.5
-intellij_extracted_name=172.4343.14
+intellij_version=U-2017.2.5
+intellij_extracted_name=U-172.4343.14
+intellij_checksum=sha256:a08ff0adfad2e8008d42e92d09696e43a70566b544db6c6f872e5b4d20436d2c
 
 ; commons packages
 [commons:children]

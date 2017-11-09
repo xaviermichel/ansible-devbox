@@ -43,6 +43,7 @@
     - work
   roles:
     - { role: install_terraform, tags: [ 'terraform' ], become: yes, become_user: "{{ user }}" }
+    - { role: work_conf, tags: [ 'work_conf' ], become: yes, become_user: "{{ user }}" }
   environment:
     - "{{ proxy_env }}"
 

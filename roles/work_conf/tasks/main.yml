@@ -1,0 +1,32 @@
+- name: Include vars from secure vars file
+  include_vars: "{{ playbook_dir }}/env/work-wl.yml"
+  run_once: true
+
+- name: Install required packages
+  become: yes
+  become_user: root
+  apt: name={{item}} state=present
+  with_items:
+    - python-pip
+
+- name: Install required packages 2
+  become: yes
+  become_user: root
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - psutil
+
+- name: Configure no-proxy in gnome
+  dconf:
+    key: "/system/proxy/ignore_hosts"
+    value: "{{ work.proxy.ignore_hosts }}"
+    state: present
+
+- name: Deploy hosts.allow (IP filter for ssh server)
+  become: yes
+  become_user: root
+  copy:
+    src: etc/hosts.allow
+    dest: /etc/hosts.allow
+

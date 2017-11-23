@@ -18,3 +18,9 @@
     - ca-certificates
     - oracle-java8-set-default
 
+- name: Install more javatools
+  become: yes
+  apt: name={{item}} state=present
+  with_items:
+    - maven
+

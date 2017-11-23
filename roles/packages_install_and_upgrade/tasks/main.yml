@@ -21,6 +21,7 @@
   - curl
   - fail2ban
   - ccze
+  - httpie
 
 - name: Upgrade all packages
   apt:

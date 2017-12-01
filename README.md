@@ -23,6 +23,11 @@ Or play a specific task by using tag :
 ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts playbook.yml -t node
 ```
 
+Or, a tag for an host group :
+```
+ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts -l home-server playbook.yml -t docker --ask-vault
+```
+
 How to provision devm
 ---------------------
 

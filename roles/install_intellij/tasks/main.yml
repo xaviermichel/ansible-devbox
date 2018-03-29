@@ -26,9 +26,13 @@
     state: absent
     path: /home/{{ user }}/bin/ideaI{{ intellij_version }}.tar.gz
 
+- name: Get extracted name
+  command: find /home/{{ user }}/bin -type d -name "idea-IU-*"
+  register: intellij_extracted_name
+
 - name: Creating symlinks for node-linux-{{ node_arch }}
   file:
-    src: idea-I{{ intellij_extracted_name }}/bin/idea.sh
+    src: "{{ intellij_extracted_name.stdout_lines[0] + '/bin/idea.sh' }}"
     dest: /home/{{ user }}/bin/idea.sh
     state: link
 

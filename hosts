@@ -2,7 +2,7 @@
 cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=root
 [home-server:vars]
 user=xavier
-node_version=v8.9.0
+node_version=v8.11.0
 node_arch=armv7l
 docker_arch=armhf
 proxy_env={}
@@ -14,7 +14,7 @@ devbox-work		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
 proxy_env={'https_proxy': 'http://proxy.priv.atos.fr:3128'}
 
 [devbox-server-home]
-devbox-home		ansible_host=192.168.1.17	ansible_user=root
+devbox-home		ansible_host=192.168.1.12	ansible_user=root
 [devbox-server-home:vars]
 proxy_env={}
 
@@ -23,13 +23,12 @@ devbox-server-home
 devbox-server-work
 [devbox-server:vars]
 user=xavier
-node_version=v8.9.0
+node_version=v8.11.0
 node_arch=x64
 docker_arch=amd64
 terraform_version=0.11.0
-intellij_version=U-2017.2.5
-intellij_extracted_name=U-172.4343.14
-intellij_checksum=sha256:a08ff0adfad2e8008d42e92d09696e43a70566b544db6c6f872e5b4d20436d2c
+intellij_version=U-2017.2.7
+intellij_checksum=sha256:a3aa6ff744cb535d00062b83cb1d31f1ecd232eff6de3b2c7695cdaf84e5d05f
 
 ; commons packages
 [commons:children]

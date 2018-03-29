@@ -2,6 +2,7 @@
   git:
     repo: 'https://github.com/xaviermichel/dotfiles.git'
     dest: /home/{{ user }}/.dotfiles
+    update: no
 
 - name: Bootstrap dotfiles
   shell: script/bootstrap

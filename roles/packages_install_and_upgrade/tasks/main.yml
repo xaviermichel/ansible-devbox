@@ -22,6 +22,7 @@
   - fail2ban
   - ccze
   - httpie
+  - tree
 
 - name: Upgrade all packages
   apt:

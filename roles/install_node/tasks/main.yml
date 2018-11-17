@@ -1,6 +1,21 @@
 - name: Creating /home/{{ user }}/bin/ directory
   file: path=/home/{{ user }}/bin state=directory
 
+- name: Update cache before install
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: yes
+  become_user: root
+
+- name: Install requirements and tools packages
+  apt: name={{ item }} state=present
+  with_items:
+  - make
+  - g++
+  become: yes
+  become_user: root
+
 - name: Check if node {{ node_version }} already exists
   stat:
     path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}/bin/node
@@ -31,18 +46,6 @@
     dest: /home/{{ user }}/bin/node-linux
     state: link
 
-- name: Creating symlinks for node
-  file:
-    src: node-linux/bin/node
-    dest: /home/{{ user }}/bin/node
-    state: link
-
-- name: Creating symlinks for npm
-  file:
-    src: node-linux/bin/npm
-    dest: /home/{{ user }}/bin/npm
-    state: link
-
 - block:
   - name: Installing node usefull packages
     npm:
@@ -53,18 +56,7 @@
       - gulp
       - http-server
       - yarn
-      - casperjs
-  - name: Link installed package
-    file:
-      src: node-linux/bin/{{ item }}
-      dest: /home/{{ user }}/bin/{{ item }}
-      state: link
-    with_items:
-      - bower
-      - gulp
-      - http-server
-      - yarn
-      - casperjs
   environment:
-    - PATH: ${PATH}:/home/{{ user }}/bin
+    - PATH: ${PATH}:/home/{{ user }}/bin:/home/{{ user }}/bin/node-linux/bin
+
 

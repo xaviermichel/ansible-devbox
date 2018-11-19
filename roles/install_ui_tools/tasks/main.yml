@@ -9,6 +9,8 @@
   - guake
   - gnome-tweak-tool
   - chromium-browser
+  - network-manager-openvpn
+  - network-manager-openvpn-gnome
   
 # Google chrome
 

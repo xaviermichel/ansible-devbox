@@ -23,7 +23,7 @@ devbox-server-home
 devbox-server-work
 [devbox-server:vars]
 user=xavier
-node_version=v8.11.0
+node_version=v10.13.0
 node_arch=x64
 docker_arch=amd64
 terraform_version=0.11.0

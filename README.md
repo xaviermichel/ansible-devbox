@@ -14,18 +14,18 @@ How to provision run script
 
 Play all the playbook :
 ```bash
-ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts playbook.yml --ask-vault
+ansible-playbook -i hosts playbook.yml --ask-vault
 ```
 Vault may be required because some personnal configurations are encryted.
 
 Or play a specific task by using tag :
 ```
-ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts playbook.yml -t node
+ansible-playbook -i hosts playbook.yml -t node
 ```
 
 Or, a tag for an host group :
 ```
-ANSIBLE_CONFIG=$(pwd)/ansible.cfg ansible-playbook -i hosts -l home-server playbook.yml -t docker --ask-vault
+ansible-playbook -i hosts -l homeserver playbook.yml -t docker --ask-vault
 ```
 
 How to provision devm

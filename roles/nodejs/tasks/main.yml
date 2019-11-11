@@ -9,40 +9,39 @@
   become_user: root
 
 - name: Install requirements and tools packages
-  apt: name={{ item }} state=present
-  with_items:
-  - make
-  - g++
+  apt: 
+    name: ['make', 'g++']
+    state: present
   become: yes
   become_user: root
 
 - name: Check if node {{ node_version }} already exists
   stat:
-    path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}/bin/node
+    path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ arch }}/bin/node
   register:
     node_bin
 
-- name: Downloading node {{ node_version }} for arch {{ node_arch }}
+- name: Downloading node {{ node_version }} for arch {{ arch }}
   get_url:
-    url: https://nodejs.org/dist/{{ node_version }}/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
-    dest: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
+    url: https://nodejs.org/dist/{{ node_version }}/node-{{ node_version }}-linux-{{ arch }}.tar.xz
+    dest: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ arch }}.tar.xz
   when: node_bin.stat.exists is defined and node_bin.stat.exists == False
 
 - name: Extracting node directory
   unarchive:
     remote_src: yes
-    src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
+    src: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ arch }}.tar.xz
     dest: /home/{{ user }}/bin
   when: node_bin.stat.exists is defined and node_bin.stat.exists == False
 
 - name: Remove downloaded zip
   file:
     state: absent
-    path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ node_arch }}.tar.xz
+    path: /home/{{ user }}/bin/node-{{ node_version }}-linux-{{ arch }}.tar.xz
 
-- name: Creating symlinks for node-linux-{{ node_arch }}
+- name: Creating symlinks for node-linux-{{ arch }}
   file:
-    src: node-{{ node_version }}-linux-{{ node_arch }}
+    src: node-{{ node_version }}-linux-{{ arch }}
     dest: /home/{{ user }}/bin/node-linux
     state: link
 
@@ -52,8 +51,6 @@
       name: "{{ item }}"
       global: yes
     with_items:
-      - bower
-      - gulp
       - http-server
       - yarn
   environment:

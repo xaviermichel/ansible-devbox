@@ -16,10 +16,10 @@
     mode: u+rwx
   when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
 
-- name: Bootstrap oh-my-zsh
-  shell: >
-    /tmp/install.sh
-  when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
+#- name: Bootstrap oh-my-zsh
+#  shell: >
+#    /tmp/install.sh
+#  when: zshrc_file.stat.exists is defined and zshrc_file.stat.exists == False
 
 - name: Copy .zshrc
   copy:

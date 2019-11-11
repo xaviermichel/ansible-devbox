@@ -23,6 +23,7 @@
   - ccze
   - httpie
   - tree
+  - rsync
 
 - name: Upgrade all packages
   apt:

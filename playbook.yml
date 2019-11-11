@@ -2,19 +2,19 @@
 
 - hosts: commons
   tags:
-    - common
+    - base
   roles:
-    - { role: packages_install_and_upgrade, tags: [ 'apt' ] }
-    - { role: install_oh_my_zsh, tags: [ 'oh-my-zsh' ], become: yes, become_user: "{{ user }}" }
-    - { role: install_my_dotfiles, tags: [ 'dotfiles' ], become: yes, become_user: "{{ user }}" }
+    - { role: base, tags: [ 'apt' ] }
+    - { role: oh_my_zsh, tags: [ 'oh-my-zsh' ], become: yes, become_user: "{{ user }}" }
+    - { role: dotfiles, tags: [ 'dotfiles' ], become: yes, become_user: "{{ user }}" }
   environment:
     - "{{ proxy_env }}"
 
-- hosts: vbox
+- hosts: homeserver 
   tags:
-    - vbox
+    - nas
   roles:
-    - { role: vbox_finish_install, tags: [ 'vbox' ] }
+    - nas
   environment:
     - "{{ proxy_env }}"
 
@@ -22,28 +22,8 @@
   tags:
     - devbox
   roles:
-    - { role: install_docker, tags: [ 'docker' ] }
-    - { role: install_node, tags: [ 'node' ], become: yes, become_user: "{{ user }}" }
-    - { role: install_java, tags: [ 'java' ] }
-  environment:
-    - "{{ proxy_env }}"
-
-- hosts: not-headless-devbox
-  tags:
-    - not-headless-devbox
-  roles:
-    - { role: install_ui_tools, tags: [ 'uitools' ] }
-    - { role: install_sublimetext, tags: [ 'sublimetext' ] }
-    - { role: install_intellij, tags: [ 'intellij' ], become: yes, become_user: "{{ user }}" }
-  environment:
-    - "{{ proxy_env }}"
-
-- hosts: work
-  tags:
-    - work
-  roles:
-    - { role: install_terraform, tags: [ 'terraform' ], become: yes, become_user: "{{ user }}" }
-    - { role: work_conf, tags: [ 'work_conf' ], become: yes, become_user: "{{ user }}" }
+    - { role: docker, tags: [ 'docker' ] }
+    - { role: nodejs, tags: [ 'nodejs' ], become: yes, become_user: "{{ user }}" }
   environment:
     - "{{ proxy_env }}"
 

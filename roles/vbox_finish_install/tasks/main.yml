@@ -1,7 +1,0 @@
-# assume that you already install virtualbox add ons
-
-- name: Adding user {{ user }} to group vboxsf
-  user: name='{{ user }}'
-    groups=vboxsf
-    append=yes
-

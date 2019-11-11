@@ -1,0 +1,26 @@
+- name: Ensures mount points exists 
+  file: 
+    path: "/media/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  with_items:
+    - data_500_1 
+    - data_500_2
+
+- name: Create master symbolic link
+  file:
+    src: /media/data_500_1
+    dest: /media/data_master
+    owner: root
+    group: root
+    state: link
+
+- name: Create slave symbolic link
+  file:
+    src: /media/data_500_2
+    dest: /media/data_slave
+    owner: root
+    group: root
+    state: link
+

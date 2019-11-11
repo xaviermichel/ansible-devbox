@@ -1,54 +1,17 @@
-[home-server]
-cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=root
-[home-server:vars]
+[homeserver]
+#cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=xavier
+cubi		ansible_connection=local    ansible_become=true
+
+[homeserver:vars]
 user=xavier
-node_version=v8.11.0
-node_arch=armv7l
+arch=armv7l
+proxy_env={}
 docker_arch=armhf
-proxy_env={}
+node_version=v12.13.0
 
-
-[devbox-server-work]
-devbox-work		ansible_host=127.0.0.1	ansible_port=1922	ansible_user=root
-[devbox-server-work:vars]
-proxy_env={'https_proxy': 'http://proxy.priv.atos.fr:3128'}
-
-[devbox-server-home]
-devbox-home		ansible_host=127.0.0.1  ansible_port=1922	ansible_user=root
-[devbox-server-home:vars]
-proxy_env={}
-
-[devbox-server:children]
-devbox-server-home
-devbox-server-work
-[devbox-server:vars]
-user=xavier
-node_version=v10.13.0
-node_arch=x64
-docker_arch=amd64
-terraform_version=0.11.0
-intellij_version=U-2018.2.6
-intellij_checksum=sha256:4403f201c0a8bf216b07eda0a618f2c459d2f1f92a2ddef2f2de0cac3fbbeb63
-
-; commons packages
 [commons:children]
-home-server
-devbox-server
+homeserver
 
-; only dev tools (node, ...)
 [devbox:children]
-home-server
-devbox-server
-
-; Devtools which require UI
-[not-headless-devbox:children]
-devbox-server
-
-; virtualbox add ons
-[vbox:children]
-devbox-server
-
-; tools only for work
-[work:children]
-devbox-server-work
+homeserver
 

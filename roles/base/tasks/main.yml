@@ -4,29 +4,37 @@
     cache_valid_time: 3600
 
 - name: Install requirements and tools packages
-  apt: name={{ item }} state=present
-  with_items:
-  - git
-  - jq
-  - htop
-  - dfc
-  - vim
-  - zsh
-  - tmux
-  - byobu
-  - zip
-  - unzip
-  - bzip2
-  - fontconfig
-  - curl
-  - fail2ban
-  - ccze
-  - httpie
-  - tree
-  - rsync
+  apt: 
+    name: 
+      - git
+      - jq
+      - htop
+      - dfc
+      - vim
+      - zsh
+      - tmux
+      - byobu
+      - zip
+      - unzip
+      - bzip2
+      - fontconfig
+      - curl
+      - fail2ban
+      - ccze
+      - httpie
+      - tree
+      - rsync
+    state: present
 
 - name: Upgrade all packages
   apt:
     upgrade: yes
 
+- name: Disable ssh for root user
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: PermitRootLogin no
+    insertafter: "^#PermitRootLogin "
+  notify:
+    - reload sshd
 

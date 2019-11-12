@@ -1,0 +1,55 @@
+#!/bin/bash
+
+BASEDIR=$(dirname "$0")
+cd ${BASEDIR}
+
+# generate CSV header banner
+echo 'Destination,Heure de départ,Retard,Information' > horaires_header.csv
+
+# download next departures for Villefranche
+curl -s 'https://www.garesetconnexions.sncf/fr/train-times/VIS/departure' | jq -r '.trains | map([.origdest, .heure, .retard, .infos] | join(",")) | join("\n")' > horaires_depart_villefranche.csv
+
+# filter for departures to Lyon, between 7h30 and 9h
+cat horaires_depart_villefranche.csv | grep '^LYON' | awk -F, '{ heureMinute=$2 ; gsub(":", "", heureMinute) ; gsub ("^0*", "", heureMinute) ; if (heureMinute>730 && heureMinute<900) { print }  }' > horaires_villefranche_lyon.csv
+
+# print for debug purpose
+cat horaires_villefranche_lyon.csv
+
+# Is there some train which are late ?
+cat horaires_villefranche_lyon.csv | awk -F, '($3 != "" && $3 != "0005") {print}' > horaires_villefranche_lyon_filtre_retards.csv
+
+# generate final matrice
+column -s, -t horaires_header.csv horaires_villefranche_lyon.csv > horaires_villefranche_lyon.txt 
+
+cat > mailheader.txt << EO_MAIL_HEADER
+MIME-Version: 1.0
+Content-Type: text/html
+Content-Disposition: inline
+<html>
+<body>
+<pre style="font: monospace">
+Villefranche => Lyon Part Dieu
+
+EO_MAIL_HEADER
+
+cat > mailfooter.txt << EO_MAIL_FOOTER
+</pre>
+</body>
+</html>
+EO_MAIL_FOOTER
+
+
+# send notification and exit with error code if something is wrong
+if [ -s horaires_villefranche_lyon_filtre_retards.csv ]; then
+	echo 'I may be late'
+
+    (
+        echo "From: xassistant <{{ secrets.smtp.username }}>";
+        echo "To: {{ secrets.mail.to }}";
+        echo "Subject: You may be late";
+        cat mailheader.txt horaires_villefranche_lyon.txt mailfooter.txt
+	) | /usr/sbin/sendmail -t
+    
+	exit 1
+fi
+

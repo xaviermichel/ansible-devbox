@@ -1,0 +1,25 @@
+- name: Create task directory for {{ item.task }} 
+  file:
+    path: /home/{{ user }}/tasks/{{ item.task }}
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0755'
+    state: directory
+
+- name: Deploy task script for {{ item.task }}
+  template:
+    src: "{{ item.file }}.j2"
+    dest: /home/{{ user }}/tasks/{{ item.task }}/{{ item.file }}
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0744'
+
+- name: Add cron execution for {{ item.task }}
+  cron:
+    name: "run {{ item.task }}"
+    weekday: "{{ item.cron_weekday | default('*') }}"
+    hour: "{{ item.cron_hour | default('*') }}"
+    minute: "{{ item.cron_min | default('*') }}"
+    job: "/home/{{ user }}/tasks/{{ item.task }}/{{ item.file }}"
+    user: "{{ user }}"
+

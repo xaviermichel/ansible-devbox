@@ -1,0 +1,6 @@
+#!/bin/sh
+
+BASEDIR=$(dirname "$0")
+
+echo url="https://www.duckdns.org/update?domains={{ secrets.duckdns.domains }}&token={{ secrets.duckdns.token }}&verbose=true&ip=" | curl -k -o ${BASEDIR}/duck.log -K -
+

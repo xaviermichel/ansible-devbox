@@ -1,0 +1,17 @@
+- name: Check if {{ item.task }} script exists
+  stat: 
+    path: /home/{{ user }}/bin/{{ item.file }}
+  register: file_script
+
+
+- name: Add cron execution for {{ item.task }}
+  cron:
+    name: "run {{ item.task }}"
+    weekday: "{{ item.cron_weekday | default('*') }}"
+    hour: "{{ item.cron_hour | default('*') }}"
+    minute: "{{ item.cron_min | default('*') }}"
+    disabled: "{{ item.cron_disabled | default('no') }}"
+    job: /home/{{ user }}/bin/{{ item.file }} 
+    user: "{{ user }}"
+  when: file_script.stat.exists == True
+

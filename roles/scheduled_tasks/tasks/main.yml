@@ -1,0 +1,25 @@
+- name: Create scheduler tasks directory
+  file:
+    path: /home/{{ user }}/tasks
+    owner: "{{ user }}" 
+    group: "{{ user }}"
+    mode: '0755'
+    state: directory
+
+- name: Include secret vars 
+  include_vars:
+    file: "{{ secrets_vars_file }}"
+    name: secrets
+
+- name: Deploy scheduled tasks scripts
+  include_tasks: deploy_task.yml
+  with_items:
+    - { task: 'duckdns', file: 'duckdns.sh', cron_min: '0' }
+    - { task: 'detect_train_delay', file: 'detect_train_delay.sh', cron_weekday: '1-5', cron_hour: '7', cron_min: '20' }
+
+- name: Configure cron for already deployed scripts
+  include_tasks: deploy_cron_for_bin.yml
+  with_items:
+    - { task: 'monitoring', file: 'surveillance.sh', cron_hour: '*/6', cron_min: '0' }
+    - { task: 'web_checker', file: 'web_checker.sh', cron_hour: '8-22', cron_min: '0', cron_disabled: yes}
+

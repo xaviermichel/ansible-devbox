@@ -1,17 +1,10 @@
-[homeserver]
+[home_server]
 #cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=xavier
 cubi		ansible_connection=local    ansible_become=true
 
-[homeserver:vars]
-user=xavier
-arch=armv7l
-proxy_env={}
-docker_arch=armhf
-node_version=v12.13.0
-
 [commons:children]
-homeserver
+home_server
 
 [devbox:children]
-homeserver
+home_server
 

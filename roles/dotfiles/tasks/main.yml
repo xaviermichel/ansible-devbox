@@ -50,10 +50,21 @@
   register:
     ssh_config
 
-- name: Copy local home ssh conf
+- name: Copy file with owner and permissions
   copy:
-    src: ssh/home_local_config
-    dest: /home/{{ user }}/.ssh/config
-  when: ssh_config.stat.exists is defined and ssh_config.stat.exists == False and 'devbox-server-home' in group_names
+    src: "{{ item }}"
+    dest: "/home/{{ user }}/.{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0644'
+    force: no
+  with_items:
+    - screenrc.conf 
+
+#- name: Copy local home ssh conf
+#  copy:
+#    src: ssh/home_local_config
+#    dest: /home/{{ user }}/.ssh/config
+#  when: ssh_config.stat.exists is defined and ssh_config.stat.exists == False and 'devbox-server-home' in group_names
 
 

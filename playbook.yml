@@ -4,26 +4,39 @@
   tags:
     - base
   roles:
-    - { role: base, tags: [ 'apt' ] }
-    - { role: oh_my_zsh, tags: [ 'oh-my-zsh' ], become: yes, become_user: "{{ user }}" }
-    - { role: dotfiles, tags: [ 'dotfiles' ], become: yes, become_user: "{{ user }}" }
+    - name: base
+      tags: ['apt']
+    - name: oh_my_zsh
+      tags: ['oh-my-zsh']
+      become_user: "{{ user }}"
+    - name: dotfiles
+      tags: ['dotfiles']
+      become_user: "{{ user }}"
   environment:
-    - "{{ proxy_env }}"
+    - "{{ proxy_env | default ({}) }}"
 
-- hosts: homeserver 
+- hosts: home_server 
   tags:
-    - nas
+    - home_server_tools
   roles:
-    - nas
+    - name: nas
+      tags: [ 'nas' ]
+    - name: mailer
+      tags: [ 'mailer' ]
+    - name: scheduled_tasks
+      tags: [ 'scheduled_tasks' ]
   environment:
-    - "{{ proxy_env }}"
+    - "{{ proxy_env | default ({}) }}"
 
 - hosts: devbox
   tags:
     - devbox
   roles:
-    - { role: docker, tags: [ 'docker' ] }
-    - { role: nodejs, tags: [ 'nodejs' ], become: yes, become_user: "{{ user }}" }
+    - name: docker
+      tags: [ 'docker' ]
+    - name: nodejs
+      tags: [ 'nodejs' ]
+      become_user: "{{ user }}"
   environment:
-    - "{{ proxy_env }}"
+    - "{{ proxy_env | default ({}) }}"
 

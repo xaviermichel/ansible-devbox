@@ -20,7 +20,7 @@
 
 - name: Fill deb repo
   shell: >
-    echo "deb [arch={{ docker_arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} "$(lsb_release -cs)" stable" | tee -a /etc/apt/sources.list.d/docker.list
+    echo "deb [arch={{ docker.arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} "$(lsb_release -cs)" stable" | tee -a /etc/apt/sources.list.d/docker.list
   when: repo_file.stat.exists is defined and repo_file.stat.exists == False
 
 - name: Updating cache before installing requirements

@@ -1,0 +1,9 @@
+user: xavier
+arch: armv7l
+
+docker:
+  arch: armhf
+
+node:
+  version: v12.13.0
+

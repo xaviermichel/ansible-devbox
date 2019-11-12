@@ -1,0 +1,19 @@
+- name: Install requirements
+  apt:
+    name: ['msmtp', 'msmtp-mta', 'mailutils', 'mailutils']
+    state: present
+    update_cache: yes
+
+- name: Include secret vars 
+  include_vars:
+    file: "{{ secrets_vars_file }}"
+    name: secrets
+
+- name: Configure mail relay
+  template:
+    src: msmtprc.j2
+    dest: /home/{{ user }}/.msmtprc 
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0600'
+

@@ -14,7 +14,6 @@ How to provision run script
 
 Play all the playbook :
 ```bash
-ansible-playbook -i hosts playbook.yml --ask-vault
 ```
 Vault may be required because some personnal configurations are encryted.
 
@@ -25,7 +24,7 @@ ansible-playbook -i hosts playbook.yml -t node
 
 Or, a tag for an host group :
 ```
-ansible-playbook -i hosts -l homeserver playbook.yml -t docker --ask-vault
+ansible-playbook -i hosts -l home_server playbook.yml -t docker --ask-vault
 ```
 
 How to provision devm

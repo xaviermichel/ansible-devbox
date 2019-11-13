@@ -1,30 +1,22 @@
 Ansible provisionner for my servers
 ===================================
 
-How to provision my devbox
---------------------------
+Install compact logger
+----------------------
 
-1. Download and install ubuntu in virtualbox
-2. Install vbox additions and reboot vm
-3. Install ssh server on vm (`sudo apt -y install openssh-server`)
-4. Run provision script
+```
+cd ..
+git clone https://github.com/octplane/ansible_stdout_compact_logger.git
+cd -
+```
+
 
 How to provision run script
 ---------------------------
 
-Play all the playbook :
-```bash
+Use tags to run provisioning :
 ```
-Vault may be required because some personnal configurations are encryted.
-
-Or play a specific task by using tag :
-```
-ansible-playbook -i hosts playbook.yml -t node
-```
-
-Or, a tag for an host group :
-```
-ansible-playbook -i hosts -l home_server playbook.yml -t docker --ask-vault
+ansible-playbook -i hosts -l home_server playbook.yml -t base
 ```
 
 How to provision devm

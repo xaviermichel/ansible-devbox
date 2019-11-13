@@ -24,3 +24,39 @@
     group: root
     state: link
 
+- name: Install samba
+  apt: 
+    name: 
+      - samba
+      - samba-common-bin
+    state: present
+    update_cache: yes
+
+- name: Include secret vars
+  include_vars:
+    file: "{{ secrets_vars_file }}"
+    name: secrets
+
+- name: Copy samba configuration
+  copy:
+    src: "{{ secrets_conf_root }}/smb.conf"
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: '0644' 
+  notify: restart smbd
+
+# https://github.com/bertvv/ansible-role-samba/blob/master/tasks/main.yml#L149
+- name: Create samba accounts if they don't exist yet
+  shell: >
+    set -o nounset -o pipefail -o errexit &&
+    (pdbedit --user={{ item }} 2>&1 > /dev/null)
+    || (echo {{ item }}; echo {{ item }})
+    | smbpasswd -s -a {{ item }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ secrets.users.samba }}"
+  no_log: true
+  register: create_user_output
+  changed_when: "'Added user' in create_user_output.stdout"
+

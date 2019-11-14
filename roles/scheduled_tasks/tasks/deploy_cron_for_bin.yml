@@ -3,7 +3,6 @@
     path: /home/{{ user }}/bin/{{ item.file }}
   register: file_script
 
-
 - name: Add cron execution for {{ item.task }}
   cron:
     name: "run {{ item.task }}"

@@ -34,10 +34,16 @@
   notify:
     - reload sshd
 
+- name: Check if {{ secrets_vars_file }} script exists
+  stat: 
+    path: "{{ secrets_vars_file }}"
+  register: secret_file
+
 - name: Include secret vars 
   include_vars:
     file: "{{ secrets_vars_file }}"
     name: secrets
+  when: secret_file.stat.exists == True
 
 - name: Create all unix users accounts
   user:
@@ -47,5 +53,5 @@
     append: yes
     state: present
   with_items: "{{ secrets.users.unix.technical }}"
-
+  when: secret_file.stat.exists == True
 

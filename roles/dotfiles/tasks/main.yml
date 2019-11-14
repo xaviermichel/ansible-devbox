@@ -57,9 +57,8 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0644'
-    force: no
   with_items:
-    - screenrc.conf 
+    - byobu
 
 #- name: Copy local home ssh conf
 #  copy:

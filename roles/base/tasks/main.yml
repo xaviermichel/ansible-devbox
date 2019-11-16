@@ -19,6 +19,7 @@
       - httpie
       - tree
       - rsync
+      - net-tools
     state: present
     update_cache: yes
 

@@ -25,6 +25,8 @@
       tags: [ 'mailer' ]
     - name: scheduled_tasks
       tags: [ 'scheduled_tasks' ]
+    - name: web_access_point 
+      tags: [ 'web_access_point' ]
   environment:
     - "{{ proxy_env | default ({}) }}"
 

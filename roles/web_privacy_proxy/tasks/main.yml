@@ -26,6 +26,23 @@
     mode: '0644'
   notify: reload redsocks
 
+- name: Copy dnsmasq configuration 
+  copy:
+    src: "dnsmasq.conf"
+    dest: "/etc/dnsmasq.conf"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+  notify: restart dnsmasq 
+
+- name: Set ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
 - name: Block access from VPN to local network 
   iptables:
     table: filter

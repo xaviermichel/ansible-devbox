@@ -21,6 +21,7 @@
       - rsync
       - net-tools
       - tcpdump
+      - dnsutils
     state: present
     update_cache: yes
 

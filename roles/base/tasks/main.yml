@@ -20,6 +20,7 @@
       - tree
       - rsync
       - net-tools
+      - tcpdump
     state: present
     update_cache: yes
 

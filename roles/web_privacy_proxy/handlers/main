@@ -1,0 +1,9 @@
+- name: iptables save
+  become: true
+  shell: netfilter-persistent save
+
+- name: reload redsocks
+  service:
+    name: redsocks
+    state: restarted
+

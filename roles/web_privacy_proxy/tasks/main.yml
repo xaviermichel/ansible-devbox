@@ -1,0 +1,80 @@
+- name: Install tools
+  apt: 
+    name: 
+      - iptables-persistent
+      - squid
+      - openvpn
+      - openssl
+      - easy-rsa 
+      - redsocks
+      - dnsmasq 
+    state: present
+    update_cache: yes
+  register: apt_openvpn
+
+- name: Print end of openvpn installation message
+  debug:
+    msg: You may now restore openvpn conf 
+  when: apt_openvpn.changed
+
+- name: Copy redsocks configuration 
+  copy:
+    src: "redsocks.conf"
+    dest: "/etc/redsocks.conf"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+  notify: reload redsocks
+
+- name: Block access from VPN to local network 
+  iptables:
+    table: filter
+    chain: "{{ item }}"
+    in_interface: tun0
+    destination: "192.168.1.0/24"
+    jump: REJECT
+  with_items:
+    - INPUT
+    - FORWARD
+  #notify: iptables save
+
+- name: Proxify DNS requests for VPN to dnsmasq 
+  iptables:
+    table: nat 
+    protocol: "{{ item }}"
+    chain: PREROUTING
+    in_interface: tun0
+    source: "!10.18.0.1"
+    jump: REDIRECT
+    destination_port: 53
+    to_ports: 53
+  with_items:
+    - tcp
+    - udp
+  #notify: iptables save
+
+- name: Proxify HTTP traffic 
+  iptables:
+    table: nat
+    protocol: tcp
+    chain: PREROUTING
+    in_interface: tun0
+    source: "!10.18.0.1"
+    destination: "!10.18.0.1/24"
+    jump: REDIRECT
+    destination_port: 80
+    to_ports: 31281
+  #notify: iptables save
+
+- name: Proxify HTTPs traffic 
+  iptables:
+    table: nat
+    protocol: tcp
+    chain: PREROUTING
+    in_interface: tun0
+    source: "!10.18.0.1"
+    destination: "!10.18.0.1/24"
+    jump: REDIRECT
+    to_ports: 31282
+  #notify: iptables save
+

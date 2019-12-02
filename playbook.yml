@@ -36,6 +36,8 @@
   roles:
     - name: docker
       tags: [ 'docker' ]
+    - name: java
+      tags: [ 'java' ]
     - name: nodejs
       tags: [ 'nodejs' ]
       become_user: "{{ user }}"

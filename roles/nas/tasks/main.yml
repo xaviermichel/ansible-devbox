@@ -44,7 +44,9 @@
     owner: root
     group: root
     mode: '0644' 
-  notify: restart smbd
+  notify: 
+    - restart smbd
+    - restart nmbd 
 
 # https://github.com/bertvv/ansible-role-samba/blob/master/tasks/main.yml#L149
 - name: Create samba accounts if they don't exist yet

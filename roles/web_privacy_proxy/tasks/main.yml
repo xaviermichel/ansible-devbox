@@ -1,23 +1,23 @@
 - name: Install tools
-  apt: 
-    name: 
+  apt:
+    name:
       - iptables-persistent
       - squid
       - openvpn
       - openssl
-      - easy-rsa 
+      - easy-rsa
       - redsocks
-      - dnsmasq 
+      - dnsmasq
     state: present
     update_cache: yes
   register: apt_openvpn
 
 - name: Print end of openvpn installation message
   debug:
-    msg: You may now restore openvpn conf 
+    msg: You may now restore openvpn conf
   when: apt_openvpn.changed
 
-- name: Copy redsocks configuration 
+- name: Copy redsocks configuration
   copy:
     src: "redsocks.conf"
     dest: "/etc/redsocks.conf"
@@ -43,9 +43,6 @@
     mode: '0644'
   with_items:
     - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-    - https://mirror1.malwaredomains.com/files/justdomains
-    - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
-    - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
     - https://hosts-file.net/ad_servers.txt
 
 - name: Assemble sub blacklists
@@ -53,14 +50,14 @@
     src: /etc/dnsmasq/blacklists/
     dest: /etc/dnsmasq/blacklist.txt
 
-- name: Copy dnsmasq configuration 
+- name: Copy dnsmasq configuration
   copy:
     src: "dnsmasq.conf"
     dest: "/etc/dnsmasq.conf"
     owner: "root"
     group: "root"
     mode: '0644'
-  notify: restart dnsmasq 
+  notify: restart dnsmasq
 
 - name: Set ip forwarding
   sysctl:
@@ -70,7 +67,7 @@
     state: present
     reload: yes
 
-- name: Block access from VPN to local network 
+- name: Block access from VPN to local network
   iptables:
     table: filter
     chain: "{{ item }}"
@@ -82,9 +79,9 @@
     - FORWARD
   #notify: iptables save
 
-- name: Proxify DNS requests for VPN to dnsmasq 
+- name: Proxify DNS requests for VPN to dnsmasq
   iptables:
-    table: nat 
+    table: nat
     protocol: "{{ item }}"
     chain: PREROUTING
     in_interface: tun0
@@ -97,7 +94,7 @@
     - udp
   #notify: iptables save
 
-- name: Proxify HTTP traffic 
+- name: Proxify HTTP traffic
   iptables:
     table: nat
     protocol: tcp
@@ -110,7 +107,7 @@
     to_ports: 31281
   #notify: iptables save
 
-- name: Proxify HTTPs traffic 
+- name: Proxify HTTPs traffic
   iptables:
     table: nat
     protocol: tcp

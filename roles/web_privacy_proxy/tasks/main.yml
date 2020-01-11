@@ -77,7 +77,7 @@
   with_items:
     - INPUT
     - FORWARD
-  #notify: iptables save
+  notify: iptables save
 
 - name: Proxify DNS requests for VPN to dnsmasq
   iptables:
@@ -92,7 +92,7 @@
   with_items:
     - tcp
     - udp
-  #notify: iptables save
+  notify: iptables save
 
 - name: Proxify HTTP traffic
   iptables:
@@ -105,7 +105,7 @@
     jump: REDIRECT
     destination_port: 80
     to_ports: 31281
-  #notify: iptables save
+  notify: iptables save
 
 - name: Proxify HTTPs traffic
   iptables:
@@ -117,5 +117,5 @@
     destination: "!10.18.0.1/24"
     jump: REDIRECT
     to_ports: 31282
-  #notify: iptables save
+  notify: iptables save
 

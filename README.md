@@ -16,7 +16,7 @@ How to provision run script
 
 Use tags to run provisioning :
 ```
-ansible-playbook -i hosts -l home_server playbook.yml -t base
+ansible-playbook --ask-become-pass -i hosts -l home_server playbook.yml -t base
 ```
 
 How to provision devm

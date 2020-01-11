@@ -1,5 +1,5 @@
 - name: Check if {{ item.task }} script exists
-  stat: 
+  stat:
     path: /home/{{ user }}/bin/{{ item.file }}
   register: file_script
 
@@ -10,7 +10,7 @@
     hour: "{{ item.cron_hour | default('*') }}"
     minute: "{{ item.cron_min | default('*') }}"
     disabled: "{{ item.cron_disabled | default('no') }}"
-    job: /home/{{ user }}/bin/{{ item.file }} 
+    job: /home/{{ user }}/bin/{{ item.file }}
     user: "{{ user }}"
   when: file_script.stat.exists == True
 

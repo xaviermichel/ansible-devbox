@@ -9,7 +9,7 @@
   become_user: root
 
 - name: Install requirements and tools packages
-  apt: 
+  apt:
     name: ['make', 'g++']
     state: present
   become: yes

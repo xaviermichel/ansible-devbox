@@ -1,6 +1,6 @@
 - name: Install requirements and tools packages
-  apt: 
-    name: 
+  apt:
+    name:
       - git
       - jq
       - htop
@@ -38,11 +38,11 @@
     - reload sshd
 
 - name: Check if {{ secrets_vars_file }} script exists
-  stat: 
+  stat:
     path: "{{ secrets_vars_file }}"
   register: secret_file
 
-- name: Include secret vars 
+- name: Include secret vars
   include_vars:
     file: "{{ secrets_vars_file }}"
     name: secrets

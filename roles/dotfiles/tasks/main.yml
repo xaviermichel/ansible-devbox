@@ -7,7 +7,7 @@
 - name: Clone zsh suggestion plugin
   git:
     repo: 'https://github.com/zsh-users/zsh-autosuggestions'
-    dest: /home/{{ user }}/.oh-my-zsh/plugins/zsh-autosuggestions 
+    dest: /home/{{ user }}/.oh-my-zsh/plugins/zsh-autosuggestions
 
 - name: Bootstrap dotfiles
   shell: script/bootstrap

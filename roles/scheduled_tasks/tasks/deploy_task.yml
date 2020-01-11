@@ -1,4 +1,4 @@
-- name: Create task directory for {{ item.task }} 
+- name: Create task directory for {{ item.task }}
   file:
     path: /home/{{ user }}/tasks/{{ item.task }}
     owner: "{{ user }}"

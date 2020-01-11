@@ -35,11 +35,11 @@
 
 - name: Clone zsh-syntax-highlighting repository
   git:
-    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git 
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
     dest: /home/{{ user }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 - name: Clone zsh-autosuggestions repository
   git:
-    repo: https://github.com/zsh-users/zsh-autosuggestions.git 
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: /home/{{ user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 

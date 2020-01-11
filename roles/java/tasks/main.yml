@@ -1,5 +1,5 @@
 - name: Install requirements and tools packages
-  apt: 
+  apt:
     name:
       - openjdk-11-jdk
       - maven

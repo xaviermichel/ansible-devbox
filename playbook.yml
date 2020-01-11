@@ -15,7 +15,7 @@
   environment:
     - "{{ proxy_env | default ({}) }}"
 
-- hosts: home_server 
+- hosts: home_server
   tags:
     - home_server_tools
   roles:
@@ -25,7 +25,7 @@
       tags: [ 'mailer' ]
     - name: scheduled_tasks
       tags: [ 'scheduled_tasks' ]
-    - name: web_privacy_proxy 
+    - name: web_privacy_proxy
       tags: [ 'web_privacy_proxy' ]
   environment:
     - "{{ proxy_env | default ({}) }}"

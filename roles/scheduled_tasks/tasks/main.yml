@@ -1,12 +1,12 @@
 - name: Create scheduler tasks directory
   file:
     path: /home/{{ user }}/tasks
-    owner: "{{ user }}" 
+    owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0755'
     state: directory
 
-- name: Include secret vars 
+- name: Include secret vars
   include_vars:
     file: "{{ secrets_vars_file }}"
     name: secrets

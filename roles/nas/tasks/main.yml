@@ -1,11 +1,11 @@
-- name: Ensures mount points exists 
-  file: 
+- name: Ensures mount points exists
+  file:
     path: "/media/{{ item }}"
     state: directory
     owner: root
     group: root
   with_items:
-    - data_500_1 
+    - data_500_1
     - data_500_2
 
 - name: Create master symbolic link
@@ -25,8 +25,8 @@
     state: link
 
 - name: Install samba
-  apt: 
-    name: 
+  apt:
+    name:
       - samba
       - samba-common-bin
     state: present
@@ -43,10 +43,10 @@
     dest: /etc/samba/smb.conf
     owner: root
     group: root
-    mode: '0644' 
-  notify: 
+    mode: '0644'
+  notify:
     - restart smbd
-    - restart nmbd 
+    - restart nmbd
 
 # https://github.com/bertvv/ansible-role-samba/blob/master/tasks/main.yml#L149
 - name: Create samba accounts if they don't exist yet

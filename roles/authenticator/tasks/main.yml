@@ -1,0 +1,26 @@
+- name: Install requirements
+  apt:
+    name:
+      - oathtool
+    state: present
+
+- name: Check if {{ secrets_vars_file }} script exists
+  stat:
+    path: "{{ secrets_vars_file }}"
+  register: secret_file
+
+- name: Include secret vars
+  include_vars:
+    file: "{{ secrets_vars_file }}"
+    name: secrets
+  when: secret_file.stat.exists == True
+
+- name: Create mfa script
+  template:
+    src: authenticator.sh.j2
+    dest: "/home/{{ user }}/bin/authenticator.sh"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0770
+  when: secret_file.stat.exists == True
+

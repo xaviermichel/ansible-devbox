@@ -27,6 +27,8 @@
       tags: [ 'scheduled_tasks' ]
     - name: web_privacy_proxy
       tags: [ 'web_privacy_proxy' ]
+    - name: authenticator
+      tags: [ 'mfa' ]
   environment:
     - "{{ proxy_env | default ({}) }}"
 

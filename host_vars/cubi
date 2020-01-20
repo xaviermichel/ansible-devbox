@@ -1,3 +1,0 @@
-secrets_conf_root: "/media/data_master/server_backup/configuration"
-secrets_vars_file: "{{ secrets_conf_root }}/home_server.yaml"
-

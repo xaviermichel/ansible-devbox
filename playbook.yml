@@ -2,6 +2,7 @@
 
 - hosts: commons
   tags:
+    - home
     - base
   roles:
     - name: base
@@ -17,7 +18,8 @@
 
 - hosts: home_server
   tags:
-    - home_server_tools
+    - home
+    - tools
   roles:
     - name: nas
       tags: [ 'nas' ]
@@ -34,6 +36,7 @@
 
 - hosts: devbox
   tags:
+    - home
     - devbox
   roles:
     - name: docker
@@ -43,6 +46,14 @@
     - name: nodejs
       tags: [ 'nodejs' ]
       become_user: "{{ user }}"
+  environment:
+    - "{{ proxy_env | default ({}) }}"
+
+- hosts: work_server
+  tags:
+    - work
+  roles:
+    - name: authenticator
   environment:
     - "{{ proxy_env | default ({}) }}"
 

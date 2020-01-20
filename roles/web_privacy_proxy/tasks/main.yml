@@ -33,14 +33,14 @@
     recurse: yes
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
 
 # https://github.com/pi-hole/pi-hole/blob/master/automated%20install/basic-install.sh
 - name: Download DNS blacklists
   get_url:
     url: "{{ item }}"
     dest: /etc/dnsmasq/blacklists/
-    mode: '0644'
+    mode: "0644"
   with_items:
     - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
     - https://hosts-file.net/ad_servers.txt
@@ -56,13 +56,13 @@
     dest: "/etc/dnsmasq.conf"
     owner: "root"
     group: "root"
-    mode: '0644'
+    mode: "0644"
   notify: restart dnsmasq
 
 - name: Set ip forwarding
   sysctl:
     name: net.ipv4.ip_forward
-    value: '1'
+    value: "1"
     sysctl_set: yes
     state: present
     reload: yes
@@ -87,8 +87,8 @@
     in_interface: tun0
     source: "!10.18.0.1"
     jump: REDIRECT
-    destination_port: 53
-    to_ports: 53
+    destination_port: "53"
+    to_ports: "53"
   with_items:
     - tcp
     - udp
@@ -103,8 +103,8 @@
     source: "!10.18.0.1"
     destination: "!10.18.0.1/24"
     jump: REDIRECT
-    destination_port: 80
-    to_ports: 31281
+    destination_port: "80"
+    to_ports: "31281"
   notify: iptables save
 
 - name: Proxify HTTPs traffic
@@ -116,6 +116,6 @@
     source: "!10.18.0.1"
     destination: "!10.18.0.1/24"
     jump: REDIRECT
-    to_ports: 31282
+    to_ports: "31282"
   notify: iptables save
 

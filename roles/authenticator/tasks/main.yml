@@ -4,16 +4,13 @@
       - oathtool
     state: present
 
-- name: Check if {{ secrets_vars_file }} script exists
-  stat:
-    path: "{{ secrets_vars_file }}"
-  register: secret_file
-
-- name: Include secret vars
-  include_vars:
-    file: "{{ secrets_vars_file }}"
-    name: secrets
-  when: secret_file.stat.exists == True
+- name: Creating /home/{{ user }}/bin/ directory
+  file:
+    path: /home/{{ user }}/bin
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
 
 - name: Create mfa script
   template:
@@ -22,5 +19,5 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: 0770
-  when: secret_file.stat.exists == True
+  when: mfa is defined
 

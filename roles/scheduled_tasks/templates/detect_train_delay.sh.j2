@@ -44,8 +44,8 @@ if [ -s horaires_villefranche_lyon_filtre_retards.csv ]; then
 	echo 'I may be late'
 
     (
-        echo "From: xassistant <{{ secrets.smtp.username }}>";
-        echo "To: {{ secrets.mail.to }}";
+        echo "From: xassistant <{{ smtp.username }}>";
+        echo "To: {{ mail.to }}";
         echo "Subject: You may be late";
         cat mailheader.txt horaires_villefranche_lyon.txt mailfooter.txt
 	) | /usr/sbin/sendmail -t

@@ -6,11 +6,6 @@
     mode: '0755'
     state: directory
 
-- name: Include secret vars
-  include_vars:
-    file: "{{ secrets_vars_file }}"
-    name: secrets
-
 - name: Deploy scheduled tasks scripts
   include_tasks: deploy_task.yml
   with_items:

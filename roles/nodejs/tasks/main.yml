@@ -1,5 +1,10 @@
 - name: Creating /home/{{ user }}/bin/ directory
-  file: path=/home/{{ user }}/bin state=directory
+  file:
+    path: /home/{{ user }}/bin
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
 
 - name: Update cache before install
   apt:

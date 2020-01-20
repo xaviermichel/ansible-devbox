@@ -1,6 +1,8 @@
 [home_server]
-#cubi		ansible_host=127.0.0.1	ansible_port=22	ansible_user=xavier
 cubi		ansible_connection=local    ansible_become=true
+
+[work_server]
+pcdev       ansible_host=work
 
 [commons:children]
 home_server

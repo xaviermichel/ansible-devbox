@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPTIONS="quit {{ secrets.mfa | dict2items | map(attribute='key') | list | join(' ') }}"
+OPTIONS="quit {{ mfa | dict2items | map(attribute='key') | list | join(' ') }}"
 
 do_xclip=false
 if which xclip >/dev/null; then
@@ -19,7 +19,7 @@ show_code() {
 select opt in $OPTIONS; do
   if [ "$opt" = "quit" ]; then
     exit
-{% for mfaName, mfaValue in secrets.mfa.items() %}
+{% for mfaName, mfaValue in mfa.items() %}
   elif [ "$opt" = "{{ mfaName }}" ]; then
       show_code "{{ mfaValue.totp }}"
 {% endfor %}

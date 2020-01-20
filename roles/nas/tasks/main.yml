@@ -32,11 +32,6 @@
     state: present
     update_cache: yes
 
-- name: Include secret vars
-  include_vars:
-    file: "{{ secrets_vars_file }}"
-    name: secrets
-
 - name: Copy samba configuration
   copy:
     src: "{{ secrets_conf_root }}/smb.conf"
@@ -57,7 +52,7 @@
     | smbpasswd -s -a {{ item }}
   args:
     executable: /bin/bash
-  with_items: "{{ secrets.users.samba }}"
+  with_items: "{{ users.samba }}"
   no_log: true
   register: create_user_output
   changed_when: "'Added user' in create_user_output.stdout"

@@ -16,7 +16,7 @@ How to provision run script
 
 Use tags to run provisioning :
 ```
-ansible-playbook --ask-become-pass -i hosts -l home_server playbook.yml -t base
+./configure.sh home base
 ```
 
 How to provision devm
@@ -26,35 +26,40 @@ How to provision devm
 
 Just adapt the `hosts` file and run provisionning command.
 
-*Using reverse SSH*
+*From remote location*
 
 This section is a bit tricky because I want my home server to provision my work station, which is not public.
-I assume that you already generate an ssh keypair for ansible. The private key is stored in `~/.ssh/id_INSECURE_DEVM_ANSIBLE_KEY` on home server.
+I assume that you already generate an ssh keypair for ansible.
 
-First step, authorize access from home to devm :
-```bash
-sudo mkdir /root/.ssh && echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDaVxwV26kZMVIb+STHewTzG7HkxH3a2F9gygX8LbpzKluIKOO6b6rZ7AW+5MKE4RsLvfvJO10PuYQ3vWH2PQkq0FFZD+YO9qjx2hIJz7AKXIxM9WPfZkckXRV6rqbFhGuCFeZnwhxj0SgFvZ/bGXz/SyJoF+O9oaLWrq7Z77UiB34XMjmxM9/EeTQYEjEQB+cQEhio3LfCCqxMOiPhPREirlS/b69pvcU1pngh06w1Qvk2AuNbZo/uBZHDd2g5J4O2q1x9u8TyzgqJBZM1QFkGezVzNVC5bUUM5vbwzrgV3YgHDOSYwmJ2Gmv+jiUzn4O+4FsW5jUc47Kq8LtT9Pun ansible@unsecure-key" | sudo tee -a /root/.ssh/authorized_keys
-```
+1. Configure remote host
 
-On devm, open access to home :
+Authorize access from remote to home :
+
 ```bash
-ssh xavier@home -R 1922:localhost:22
+# On remote host
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDwy8p7u84jgvDzlv6DTTCyaw8BT8mCE9qhdRoTfLbltrzziQPknM9S3e9k0DPn5+7Vjcg1hCuk7pBX8WDgSUF+ns2pDo1ebunds9MU5jkImwzOsT1GQbkkytRBpq6F9TDfaODluLLIhmS3jELwULXDTr92QgncWDHdb+IrhoWpVBEp2nQQF7RSVDZ4BHQGlvW1wgVAbEmJxbUvs9blNpTGm2flFzlqZfdOLYDSb3aXSmwMcLQDgk8qCbgcsJ1jX4qBwEv8Qv0tKECRhP+aNtmgH8m1noaDBbkFBVPRvP0N5C8SPNVn767yoMMzVtPt33poC4Uz1Uxdy8cP1OzsPsAx ansible@unsecure-key" | tee -a /home/$USER/.ssh/authorized_keys
 ```
 
 You may need some conf in your .ssh/config :
 ```bash
 Host home
 	Hostname somepublicurl.net
-	Port 22
+    User xavier
+    Port 9922
 	ForwardAgent yes
 	IdentityFile ~/.ssh/id_cubi
-	ProxyCommand /usr/bin/connect-proxy -H proxy.fr:3128 %h %p
+	#ProxyCommand /usr/bin/connect-proxy -H proxy.fr:3128 %h %p
 ```
+
+From remote host, open access to home :
+```bash
+ssh home
+```
+
+2. Access from provisioning VM to remote
 
 On ansible server, you can now access to devm :
 ```bash
-ssh -i $HOME/.ssh/id_INSECURE_DEVM_ANSIBLE_KEY root@127.0.0.1 -p 1922
+ssh -i $HOME/.ssh/ansible/id_key USER@127.0.0.1 -p 9922
 ```
-
-You may now wan't to remove the key added in `/root/.ssh/authorized_keys`.
 

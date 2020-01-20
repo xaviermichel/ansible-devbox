@@ -4,11 +4,6 @@
     state: present
     update_cache: yes
 
-- name: Include secret vars
-  include_vars:
-    file: "{{ secrets_vars_file }}"
-    name: secrets
-
 - name: Configure mail relay
   template:
     src: msmtprc.j2

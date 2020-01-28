@@ -1,4 +1,4 @@
-# vi: set ft=ansible :
+# vi: set ft=yaml.ansible :
 
 - hosts: commons
   tags:

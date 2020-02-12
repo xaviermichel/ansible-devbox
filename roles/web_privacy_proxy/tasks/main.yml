@@ -79,21 +79,6 @@
     - FORWARD
   notify: iptables save
 
-- name: Proxify DNS requests for VPN to dnsmasq
-  iptables:
-    table: nat
-    protocol: "{{ item }}"
-    chain: PREROUTING
-    in_interface: tun0
-    source: "!10.18.0.1"
-    jump: REDIRECT
-    destination_port: "53"
-    to_ports: "53"
-  with_items:
-    - tcp
-    - udp
-  notify: iptables save
-
 - name: Proxify HTTP traffic
   iptables:
     table: nat

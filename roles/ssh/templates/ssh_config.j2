@@ -1,0 +1,57 @@
+#jinja2: trim_blocks:False
+# MANAGED BY ANSIBLE
+
+{%- for group in ssh.config %}
+{{ '' }}
+# ==============================
+# Group: {{ group }}
+# ==============================
+{%- for serverGroup,serverGroupValue in ssh.config[group].items() %}
+
+# {{ serverGroup }}
+# ------------------------------
+{%- for server in serverGroupValue.servers | default([serverGroup]) %}
+
+{%- if serverGroupValue.servers is defined and serverGroupValue.servers[server].comment is defined %}
+{{ serverGroupValue.servers[server].comment | comment }}
+{%- endif %}
+Host {{ server }}
+    {%- if serverGroupValue.domain is defined %} {{ server }}.{{ serverGroupValue.domain }}{% endif %}
+    {%- if serverGroupValue.servers[server].alias_hostname is defined %} {{ serverGroupValue.servers[server].hostname }}{%- endif %}
+    {%- if serverGroupValue.servers is defined and serverGroupValue.servers[server].alias is defined %}
+        {%- for alias in serverGroupValue.servers[server].alias %} {{ alias }}{%- endfor %}
+    {%- endif %}
+    {%- if serverGroupValue.servers[server].hostname is defined %}
+    Hostname {{ serverGroupValue.servers[server].hostname }}
+    {%- endif %}
+    {%- if serverGroupValue.port  is defined %}
+    Port {{ serverGroupValue.port }}
+    {%- endif %}
+    {%- if serverGroupValue.user is defined %}
+    User {{ serverGroupValue.user }}
+    {%- endif %}
+    {%- if serverGroupValue.key is defined %}
+    IdentityFile ~/.ssh/{{ serverGroupValue.key }}
+    {%- endif %}
+    {%- if serverGroupValue.proxy_command is defined %}
+    ProxyCommand {{ serverGroupValue.proxy_command }}
+    {%- endif %}
+    {%- if serverGroupValue.forward_agent is defined %}
+    ForwardAgent {{ serverGroupValue.forward_agent }}
+    {%- endif %}
+    {%- if serverGroupValue.servers[server].forward is defined %}
+    {%- for forwardGroup,forwardGroupValue in serverGroupValue.servers[server].forward.items() %}
+        {%- for forwardRule in forwardGroupValue %}
+    {{ forwardGroup | capitalize }}Forward {{ forwardRule }}
+        {%- endfor %}
+    {%- endfor %}
+    {%- endif %}
+    {%- if serverGroupValue.servers[server].keep_alive is defined %}
+    ServerAliveInterval 60
+    TCPKeepAlive yes
+    {%- endif %}
+
+{%- endfor %}
+{%- endfor %}
+{%- endfor %}
+

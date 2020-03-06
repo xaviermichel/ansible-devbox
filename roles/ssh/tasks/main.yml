@@ -1,0 +1,18 @@
+- name: Create ssh directory
+  file:
+    path: /home/{{ user }}/.ssh
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+    state: directory
+
+- name: Deploy ssh_config
+  template:
+    src: "ssh_config.j2"
+    dest: /home/{{ user }}/.ssh/config
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '664'
+  when: ssh is defined and ssh.config is defined
+
+

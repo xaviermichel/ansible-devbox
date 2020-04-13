@@ -8,5 +8,10 @@ fi
 env=$1
 tags=$2
 
-ansible-playbook --ask-become-pass -i hosts playbook.yml --extra-vars "@${env}_secret_vars.yaml" --extra-vars "@commons_secret_vars.yaml" --tags "${tags}"
+ansible-playbook --ask-become-pass \
+    -i hosts playbook.yml \
+    -l "${env}" \
+    --extra-vars "@${env}_secret_vars.yaml" \
+    --extra-vars "@commons_secret_vars.yaml" \
+    --tags "${tags}"
 

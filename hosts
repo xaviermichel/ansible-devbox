@@ -1,12 +1,22 @@
-[home_server]
-cubi		ansible_connection=local    ansible_become=true
+[home]
+cubi        ansible_connection=local    ansible_become=true
 
-[work_server]
+[home_devm]
+devm        ansible_host=devm
+
+[work]
 pcdev       ansible_host=work
 
+[commons_ui:children]
+work
+home_devm
+
 [commons:children]
-home_server
+home
+work
+home_devm
 
 [devbox:children]
-home_server
+work
+home_devm
 

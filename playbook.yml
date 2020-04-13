@@ -2,8 +2,8 @@
 
 - hosts: commons
   tags:
-    - home
     - base
+  become: yes
   roles:
     - name: base
       tags: ['apt']
@@ -13,12 +13,29 @@
     - name: dotfiles
       tags: ['dotfiles']
       become_user: "{{ user }}"
+    - name: authenticator
+      tags: [ 'mfa' ]
+    - name: ssh
+      tags: [ 'ssh' ]
   environment:
     - "{{ proxy_env | default ({}) }}"
 
-- hosts: home_server
+- hosts: commons_ui
   tags:
-    - home
+    - base
+  become: yes
+  roles:
+    - name: base_ui
+      tags: ['apt']
+    - name: oefenweb.chrome
+      tags: ['chrome']
+    - name: intellij
+      tags: ['intellij']
+  environment:
+    - "{{ proxy_env | default ({}) }}"
+
+- hosts: home
+  tags:
     - tools
   roles:
     - name: nas
@@ -29,36 +46,30 @@
       tags: [ 'scheduled_tasks' ]
     - name: web_privacy_proxy
       tags: [ 'web_privacy_proxy' ]
-    - name: authenticator
-      tags: [ 'mfa' ]
-    - name: ssh
-      tags: [ 'ssh' ]
   environment:
     - "{{ proxy_env | default ({}) }}"
 
 - hosts: devbox
   tags:
-    - home
     - devbox
+  become: yes
   roles:
     - name: docker
       tags: [ 'docker' ]
     - name: java
       tags: [ 'java' ]
-    - name: nodejs
-      tags: [ 'nodejs' ]
+    - name: nvm
+      tags: [ 'nvm' ]
       become_user: "{{ user }}"
   environment:
     - "{{ proxy_env | default ({}) }}"
 
-- hosts: work_server
+- hosts: home
   tags:
-    - work
+    - devbox
+  become: yes
   roles:
-    - name: authenticator
-      tags: [ 'work_mfa' ]
-    - name: ssh
-      tags: [ 'work_ssh' ]
-  environment:
-    - "{{ proxy_env | default ({}) }}"
+    - name: nodejs
+      tags: [ 'nodejs' ]
+      become_user: "{{ user }}"
 

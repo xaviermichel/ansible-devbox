@@ -1,20 +1,10 @@
 Ansible provisionner for my servers
 ===================================
 
-Install compact logger
-----------------------
-
-```
-cd ..
-git clone https://github.com/octplane/ansible_stdout_compact_logger.git
-cd -
-```
-
-
 How to provision run script
 ---------------------------
 
-Use tags to run provisioning :
+Use host and tag to run provisioning :
 ```
 ./configure.sh home base
 ```
@@ -43,12 +33,9 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDwy8p7u84jgvDzlv6DTTCyaw8BT8mCE9qhdR
 You may need some conf in your .ssh/config :
 ```bash
 Host home
-	Hostname somepublicurl.net
+    Hostname somepublicurl.net
     User xavier
-    Port 9922
-	ForwardAgent yes
-	IdentityFile ~/.ssh/id_cubi
-	#ProxyCommand /usr/bin/connect-proxy -H proxy.fr:3128 %h %p
+    RemoteForward 9922 127.0.0.1:22
 ```
 
 From remote host, open access to home :

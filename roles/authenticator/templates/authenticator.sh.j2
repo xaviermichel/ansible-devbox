@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# MANAGED BY ANSIBLE
+
 OPTIONS="quit {{ mfa | dict2items | map(attribute='key') | list | join(' ') }}"
 
 do_xclip=false

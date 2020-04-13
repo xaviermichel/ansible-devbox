@@ -1,0 +1,14 @@
+- name: Install requirements and tools packages
+  apt:
+    name: ['make', 'g++']
+    state: present
+  become: yes
+  become_user: root
+
+# https://github.com/nvm-sh/nvm#ansible
+- name: nvm install
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nodejs.nvm.version | default('v0.35.3') }}/install.sh | bash
+  args:
+    creates: "/home/{{ user }}/.nvm/nvm.sh"
+

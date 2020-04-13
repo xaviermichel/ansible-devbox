@@ -1,0 +1,7 @@
+- name: Install requirements and tools packages
+  apt:
+    name:
+      - guake
+    state: present
+    update_cache: yes
+

@@ -1,4 +1,6 @@
 playbook.retry
+external_roles
+ansible_stdout_compact_logger
 
 *_secret_vars.yaml
 

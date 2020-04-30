@@ -1,6 +1,0 @@
-user: xmichel
-arch: amd64
-
-docker:
-  arch: amd64
-

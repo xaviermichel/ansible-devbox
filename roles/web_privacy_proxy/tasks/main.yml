@@ -43,7 +43,7 @@
     mode: "0644"
   with_items:
     - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-    - https://hosts-file.net/ad_servers.txt
+    #- https://hosts-file.net/ad_servers.txt
 
 - name: Assemble sub blacklists
   assemble:
@@ -51,8 +51,8 @@
     dest: /etc/dnsmasq/blacklist.txt
 
 - name: Copy dnsmasq configuration
-  copy:
-    src: "dnsmasq.conf"
+  template:
+    src: "dnsmasq.conf.j2"
     dest: "/etc/dnsmasq.conf"
     owner: "root"
     group: "root"

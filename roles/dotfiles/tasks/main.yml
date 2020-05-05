@@ -19,6 +19,16 @@
     url: https://gist.githubusercontent.com/xaviermichel/5635753/raw/simple.zsh-theme
     dest: /home/{{ user }}/.oh-my-zsh/themes/xavier-simple.zsh-theme
 
+- name: Create kube-pse1 overide plugin directory
+  file:
+    path: /home/{{ user }}/.oh-my-zsh/custom/plugins/kube-ps1/
+    state: directory
+
+- name: Downloading kube-ps1 overide plugin
+  get_url:
+    url: https://gist.githubusercontent.com/xaviermichel/3bbd4ad3c838135ff0c53b4e2faecdad/raw/kube-ps1.plugin.zsh
+    dest: /home/{{ user }}/.oh-my-zsh/custom/plugins/kube-ps1/kube-ps1.plugin.zsh
+
 - name: Configuring default theme
   replace:
     path: /home/{{ user }}/.zshrc
@@ -42,7 +52,9 @@
     msg: You can complete installation with $ vim +PluginInstall +qall
 
 - name: Creating /home/{{ user }}/.ssh directory
-  file: path=/home/{{ user }}/.ssh state=directory
+  file:
+    path: /home/{{ user }}/.ssh
+    state: directory
 
 - name: Check if ssh config already exists
   stat:

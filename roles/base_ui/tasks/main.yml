@@ -2,6 +2,10 @@
   apt:
     name:
       - guake
+      - chromium-browser
+      - openvpn
+      - resolvconf
+      - network-manager-openvpn
     state: present
     update_cache: yes
 

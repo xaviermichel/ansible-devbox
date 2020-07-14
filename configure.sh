@@ -8,7 +8,13 @@ fi
 env=$1
 tags=$2
 
-ansible-playbook --ask-become-pass \
+extra_args=
+if [[ $tags =~ "base" ]]; then
+    extra_args="${extra_args} --ask-vault-pass"
+fi
+
+ansible-playbook ${extra_args} \
+    --ask-become-pass \
     -i hosts playbook.yml \
     -l "${env}" \
     --extra-vars "@${env}_secret_vars.yaml" \

@@ -31,6 +31,8 @@
       tags: ['chrome']
     - name: intellij
       tags: ['intellij']
+    - name: gantsign.visual-studio-code
+      tags: ['vscode']
   environment:
     - "{{ proxy_env | default ({}) }}"
 

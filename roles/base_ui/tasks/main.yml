@@ -7,5 +7,4 @@
       - resolvconf
       - network-manager-openvpn
     state: present
-    update_cache: yes
 

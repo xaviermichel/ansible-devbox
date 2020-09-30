@@ -24,8 +24,8 @@ Host {{ server }}
     {%- if serverGroupValue.servers[server].hostname is defined %}
     Hostname {{ serverGroupValue.servers[server].hostname }}
     {%- endif %}
-    {%- if serverGroupValue.port  is defined %}
-    Port {{ serverGroupValue.port }}
+    {%- if serverGroupValue.servers[server].port is defined or serverGroupValue.port is defined %}
+    Port {{ serverGroupValue.servers[server].port | default(serverGroupValue.port) }}
     {%- endif %}
     {%- if serverGroupValue.user is defined %}
     User {{ serverGroupValue.user }}

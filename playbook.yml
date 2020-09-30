@@ -13,10 +13,18 @@
     - name: dotfiles
       tags: ['dotfiles']
       become_user: "{{ user }}"
-    - name: authenticator
-      tags: [ 'mfa' ]
     - name: ssh
       tags: [ 'ssh' ]
+  environment:
+    - "{{ proxy_env | default ({}) }}"
+
+- hosts: trusted
+  tags:
+    - base
+  become: yes
+  roles:
+    - name: authenticator
+      tags: [ 'mfa' ]
   environment:
     - "{{ proxy_env | default ({}) }}"
 
@@ -63,6 +71,16 @@
     - name: nvm
       tags: [ 'nvm' ]
       become_user: "{{ user }}"
+  environment:
+    - "{{ proxy_env | default ({}) }}"
+
+- hosts: opsbox
+  tags:
+    - opsbox
+  become: yes
+  roles:
+    - name: kubernetes_tools
+      tags: [ 'k8s_tools' ]
   environment:
     - "{{ proxy_env | default ({}) }}"
 

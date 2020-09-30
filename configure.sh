@@ -15,7 +15,8 @@ fi
 
 ansible-playbook ${extra_args} \
     --ask-become-pass \
-    -i hosts playbook.yml \
+    -i hosts \
+    playbook.yml \
     -l "${env}" \
     --extra-vars "@${env}_secret_vars.yaml" \
     --extra-vars "@commons_secret_vars.yaml" \

@@ -1,14 +1,19 @@
 [home]
 cubi        ansible_connection=local    ansible_become=true
-
 [home_devm]
 devm        ansible_host=devm
-
-[work]
+[work_station]
 pcdev       ansible_host=work
+[work_headless]
+work-local-installer ansible_host=work-local-installer
+
+
+[work:children]
+work_station
+work_headless
 
 [commons_ui:children]
-work
+work_station
 home_devm
 
 [commons:children]
@@ -17,6 +22,15 @@ work
 home_devm
 
 [devbox:children]
-work
+work_station
 home_devm
+
+[opsbox:children]
+home_devm
+work
+
+[trusted:children]
+home
+home_devm
+work_station
 

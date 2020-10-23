@@ -51,13 +51,13 @@
     - tools
   roles:
     - name: nas
-      tags: [ 'nas' ]
+      tags: ['nas']
     - name: mailer
-      tags: [ 'mailer' ]
+      tags: ['mailer']
     - name: scheduled_tasks
-      tags: [ 'scheduled_tasks' ]
+      tags: ['scheduled_tasks']
     - name: web_privacy_proxy
-      tags: [ 'web_privacy_proxy' ]
+      tags: ['web_privacy_proxy']
   environment:
     - "{{ proxy_env | default ({}) }}"
 
@@ -67,11 +67,11 @@
   become: yes
   roles:
     - name: docker
-      tags: [ 'docker' ]
+      tags: ['docker']
     - name: java
-      tags: [ 'java' ]
+      tags: ['java']
     - name: nvm
-      tags: [ 'nvm' ]
+      tags: ['nvm']
       become_user: "{{ user }}"
   environment:
     - "{{ proxy_env | default ({}) }}"
@@ -82,7 +82,9 @@
   become: yes
   roles:
     - name: kubernetes_tools
-      tags: [ 'k8s_tools' ]
+      tags: ['k8s_tools']
+    - name: terraform
+      tags: ['terraform']
   environment:
     - "{{ proxy_env | default ({}) }}"
 
@@ -92,6 +94,6 @@
   become: yes
   roles:
     - name: nodejs
-      tags: [ 'nodejs' ]
+      tags: ['nodejs']
       become_user: "{{ user }}"
 

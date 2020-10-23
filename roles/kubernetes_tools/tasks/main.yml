@@ -34,3 +34,33 @@
     - kubectx
     - kubens
 
+- name: Check for k9s installation
+  stat:
+    path: '/usr/local/bin/k9s'
+  changed_when: false
+  register: k9s_binary
+
+- when: not k9s_binary.stat.exists or k9s_overwrite_existing
+  block:
+    - name: Download k9s
+      get_url:
+        url: 'https://github.com/derailed/k9s/releases/download/v{{ k9s_ver }}/k9s_Linux_{{ ansible_architecture }}.tar.gz'
+        dest: '/tmp/k9s.tar.gz'
+        mode: '0644'
+    - name: Unpack k9s
+      unarchive:
+        remote_src: yes
+        src: '/tmp/k9s.tar.gz'
+        dest: '/usr/local/bin'
+        creates: '/usr/local/bin/k9s'
+        owner: root
+        group: root
+        exclude:
+          - README.md
+          - LICENCE
+  always:
+    - name: Cleanup temp files
+      file:
+        dest: '/tmp/k9s.tar.gz'
+        state: absent
+

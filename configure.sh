@@ -9,7 +9,7 @@ env=$1
 tags=$2
 
 extra_args=
-if [[ $tags =~ "base" ]]; then
+if [[ $tags =~ "base" || $tags =~ "myconf" ]]; then
     extra_args="${extra_args} --ask-vault-pass"
 fi
 

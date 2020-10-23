@@ -14,7 +14,7 @@
       tags: ['dotfiles']
       become_user: "{{ user }}"
     - name: ssh
-      tags: [ 'ssh' ]
+      tags: ['ssh']
   environment:
     - "{{ proxy_env | default ({}) }}"
 
@@ -24,7 +24,9 @@
   become: yes
   roles:
     - name: authenticator
-      tags: [ 'mfa' ]
+      tags: ['mfa']
+    - name: base_config_files
+      tags: ['myconf']
   environment:
     - "{{ proxy_env | default ({}) }}"
 

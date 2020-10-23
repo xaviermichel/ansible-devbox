@@ -44,14 +44,3 @@
   with_items: "{{ users.unix.technical }}"
   when: users.unix.technical is defined
 
-- name: Copy configurations files
-  copy:
-    src: "{{ secrets_conf_root }}/files/{{ item.src }}"
-    dest: "{{ item.dst }}"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: "{{ item.mode | default('0644') }}"
-    force: no
-  with_items: "{{ files }}"
-  when: files is defined
-

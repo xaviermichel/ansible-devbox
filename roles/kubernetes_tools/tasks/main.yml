@@ -7,7 +7,7 @@
   apt_repository:
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     state: present
-    filename: kubernetes.list
+    filename: kubernetes
 
 - name: Install Kubernetes tools
   apt:

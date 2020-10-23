@@ -7,7 +7,7 @@
   apt_repository:
     repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     state: present
-    filename: terraform.list
+    filename: terraform
 
 - name: Install
   apt:

@@ -52,8 +52,8 @@
     | smbpasswd -s -a {{ item }}
   args:
     executable: /bin/bash
-  with_items: "{{ users.samba }}"
-  no_log: true
+  with_items: "{{ accounts.samba }}"
+  #no_log: true
   register: create_user_output
   changed_when: "'Added user' in create_user_output.stdout"
 

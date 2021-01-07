@@ -1,5 +1,5 @@
 [home]
-cubi        ansible_connection=local    ansible_become=true
+pi          ansible_connection=local    ansible_become=true
 [home_devm]
 devm        ansible_host=devm
 [work_station]
@@ -22,6 +22,7 @@ work
 home_devm
 
 [devbox:children]
+home
 work_station
 home_devm
 

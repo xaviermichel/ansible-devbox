@@ -88,12 +88,3 @@
   environment:
     - "{{ proxy_env | default ({}) }}"
 
-- hosts: home
-  tags:
-    - devbox
-  become: yes
-  roles:
-    - name: nodejs
-      tags: ['nodejs']
-      become_user: "{{ user }}"
-

@@ -1,11 +1,13 @@
-address=/.local/0.0.0.0
+domain-needed
 
-no-resolv
 #resolv-file=/etc/resolv.dnsmasq
 #conf-file=/etc/dnsmasq/domains.txt
 
 {% if duckdns is defined %}
-address=/{{ duckdns.domains }}.duckdns.org/10.18.0.1
+address=/{{ duckdns.domains }}.duckdns.org/{{ vpn_ip_address }}
+{% endif %}
+{% if hostname is defined and local_ip_address is defined %}
+address=/{{ hostname }}/{{ local_ip_address }}
 {% endif %}
 addn-hosts=/etc/dnsmasq/blacklist.txt
 

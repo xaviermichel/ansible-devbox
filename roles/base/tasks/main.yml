@@ -1,3 +1,13 @@
+- name: Configure hostname
+  hostname:
+    name: "{{ hostname }}"
+  when: hostname is defined
+
+- name: Setup timezone
+  timezone:
+    name: "{{ timezone }}"
+  when: timezone is defined
+
 - name: Install requirements and tools packages
   apt:
     name:
@@ -41,6 +51,6 @@
     shell: /sbin/nologin
     append: yes
     state: present
-  with_items: "{{ users.unix.technical }}"
-  when: users.unix.technical is defined
+  with_items: "{{ accounts.unix.technical }}"
+  when: accounts.unix.technical is defined
 

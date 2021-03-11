@@ -62,13 +62,11 @@
   register:
     ssh_config
 
-- name: Copy file with owner and permissions
+- name: Copy byobu configuration
   copy:
-    src: "{{ item }}"
-    dest: "/home/{{ user }}/.{{ item }}"
+    src: "/home/{{ user }}/.dotfiles/bybou/tmux.conf"
+    dest: "/home/{{ user }}/.byobu/.tmux.conf"
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0644'
-  with_items:
-    - byobu
 

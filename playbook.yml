@@ -70,6 +70,8 @@
       tags: ['docker']
     - name: java
       tags: ['java']
+    - name: developement_tools
+      tags: ['developement_tools']
     - name: nvm
       tags: ['nvm']
       become_user: "{{ user }}"

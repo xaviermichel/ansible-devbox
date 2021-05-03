@@ -1,0 +1,11 @@
+- name: Install git-chglog
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: git-chglog
+    package_binary: git-chglog
+    package_overwrite_existing: "{{ git_chglog_overwrite_existing | default(development_tools_overwrite_existing) }}"
+    package_version: "{{ git_chglog_version | default(development_tools_version) }}"
+    package_repository: git-chglog/git-chglog
+    package_release_filename: 'git-chglog_@VERSION_linux_amd64'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+

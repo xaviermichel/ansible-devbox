@@ -17,6 +17,7 @@
   vars:
     packages:
       - kubectl
+      - jq
 
 - name: Clone kubens/kubectx repo
   git:
@@ -34,61 +35,58 @@
     - kubectx
     - kubens
 
-- name: check for k9s installation
-  stat:
-    path: '/usr/local/bin/k9s'
-  changed_when: false
-  register: k9s_binary
-- when: not k9s_binary.stat.exists or k9s_overwrite_existing
-  block:
-    - name: Download k9s
-      get_url:
-        url: 'https://github.com/derailed/k9s/releases/download/v{{ k9s_version }}/k9s_Linux_{{ ansible_architecture }}.tar.gz'
-        dest: '/tmp/k9s.tar.gz'
-        mode: '0644'
-    - name: Unpack k9s
-      unarchive:
-        remote_src: yes
-        src: '/tmp/k9s.tar.gz'
-        dest: '/usr/local/bin'
-        creates: '/usr/local/bin/k9s'
-        owner: root
-        group: root
-        exclude:
-          - README.md
-          - LICENCE
-  always:
-    - name: Cleanup temp files
-      file:
-        dest: '/tmp/k9s.tar.gz'
-        state: absent
+- name: Install k9s
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: k9s
+    package_binary: k9s
+    package_overwrite_existing: "{{ k9s_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ k9s_version | default(k8s_tools_version) }}"
+    package_repository: derailed/k9s
+    package_release_filename: k9s_Linux_{{ ansible_architecture }}
 
-- name: check for df-pv installation
-  stat:
-    path: '/usr/local/bin/df-pv'
-  changed_when: false
-  register: df_pv_binary
-- when: not df_pv_binary.stat.exists or df_pv_overwrite_existing
-  block:
-    - name: Download df-pv
-      get_url:
-        url: 'https://github.com/yashbhutwala/kubectl-df-pv/releases/download/v{{ df_pv_version }}/kubectl-df-pv_v{{ df_pv_version }}_linux_amd64.tar.gz'
-        dest: '/tmp/df-pv.tar.gz'
-        mode: '0644'
-    - name: Unpack df-pv
-      unarchive:
-        remote_src: yes
-        src: '/tmp/df-pv.tar.gz'
-        dest: '/usr/local/bin'
-        creates: '/usr/local/bin/df-pv'
-        owner: root
-        group: root
-        exclude:
-          - README.md
-          - LICENCE
-  always:
-    - name: Cleanup temp files
-      file:
-        dest: '/tmp/df-pv.tar.gz'
-        state: absent
+- name: Install df-pv
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: df-pv
+    package_binary: df-pv
+    package_overwrite_existing: "{{ k9s_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ df_pv_version | default(k8s_tools_version) }}"
+    package_repository: yashbhutwala/kubectl-df-pv
+    package_release_filename: 'kubectl-df-pv_@VERSION_linux_amd64'
+
+- name: Install stern
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: stern
+    package_binary: stern
+    package_overwrite_existing: "{{ stern_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ stern_version | default(k8s_tools_version) }}"
+    package_repository: wercker/stern
+    package_release_filename: 'stern_linux_amd64'
+    package_release_format: ''
+    package_is_archive: false
+
+- name: Install tkn
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: tkn
+    package_binary: tkn
+    package_overwrite_existing: "{{ tkn_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ tkn_version | default(k8s_tools_version) }}"
+    package_repository: tektoncd/cli
+    package_release_filename: 'tkn_@VERSION_Linux_x86_64'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+
+- name: Install ytt
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: ytt
+    package_binary: ytt
+    package_overwrite_existing: "{{ ytt_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ ytt_version | default(k8s_tools_version) }}"
+    package_repository: vmware-tanzu/carvel-ytt
+    package_release_filename: ytt-linux-amd64
+    package_release_format: ''
+    package_is_archive: false
 

@@ -1,0 +1,56 @@
+- name: check for {{ package_name }} installation
+  stat:
+    path: '/usr/local/bin/{{ package_binary }}'
+  changed_when: false
+  register: package_binary_exists
+- when: not package_binary_exists.stat.exists or package_overwrite_existing
+  block:
+    - name: get latest version
+      shell:
+        cmd: curl --silent "https://api.github.com/repos/{{ package_repository }}/releases/latest" | jq -r .tag_name
+        warn: false
+      register: package_latest_version
+      when: package_version == 'latest'
+    - name: save to install version
+      shell: echo "{{ package_latest_version.stdout | default(package_version) }}"
+      register: package_to_install_version
+    - name: get release real name
+      shell: echo "{{ package_latest_version.stdout | default(package_version) }}" {{ package_version_mutation | default('') }}
+      register: package_to_install_file_version
+    - name: download
+      get_url:
+        url: 'https://github.com/{{ package_repository }}/releases/download/{{ package_to_install_version.stdout }}/{{ package_release_filename | replace("@VERSION", package_to_install_file_version.stdout) }}{{ package_release_format | default(".tar.gz") }}'
+        dest: '/tmp/{{ package_binary }}{{ package_release_format | default(".tar.gz") }}'
+        mode: '0644'
+    - name: remove old version
+      file:
+        dest: /usr/local/bin/{{ package_binary }}
+        state: absent
+    - name: unpack
+      unarchive:
+        remote_src: yes
+        src: '/tmp/{{ package_binary }}{{ package_release_format | default(".tar.gz") }}'
+        dest: '/usr/local/bin'
+        creates: '/usr/local/bin/{{ package_binary }}'
+        owner: root
+        group: root
+        exclude:
+          - README.md
+          - LICENCE
+          - CHANGELOG.md
+      when: package_is_archive | default(true)
+    - name: copy if not archive
+      copy:
+        src: '/tmp/{{ package_binary }}{{ package_release_format | default(".tar.gz") }}'
+        dest: '/usr/local/bin/{{ package_binary }}'
+        owner: root
+        group: root
+        mode: '0777'
+        remote_src: true
+      when: not package_is_archive | default(true)
+  always:
+    - name: cleanup temp files
+      file:
+        dest: '/tmp/{{ package_binary }}{{ package_release_format | default(".tar.gz") }}'
+        state: absent
+

@@ -10,13 +10,16 @@
         cmd: curl --silent "https://api.github.com/repos/{{ package_repository }}/releases/latest" | jq -r .tag_name
         warn: false
       register: package_latest_version
+      changed_when: false
       when: package_version == 'latest'
     - name: save to install version
       shell: echo "{{ package_latest_version.stdout | default(package_version) }}"
       register: package_to_install_version
+      changed_when: false
     - name: get release real name
       shell: echo "{{ package_latest_version.stdout | default(package_version) }}" {{ package_version_mutation | default('') }}
       register: package_to_install_file_version
+      changed_when: false
     - name: download
       get_url:
         url: 'https://github.com/{{ package_repository }}/releases/download/{{ package_to_install_version.stdout }}/{{ package_release_filename | replace("@VERSION", package_to_install_file_version.stdout) }}{{ package_release_format | default(".tar.gz") }}'

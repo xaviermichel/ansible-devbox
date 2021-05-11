@@ -9,3 +9,17 @@
     package_release_filename: 'git-chglog_@VERSION_linux_amd64'
     package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
 
+- name: check for mc installation
+  stat:
+    path: /usr/local/bin/mc
+  changed_when: false
+  register: mc_binary_exists
+- when: not mc_binary_exists.stat.exists
+  name: Install mc (minio cli)
+  get_url:
+    url: https://dl.min.io/client/mc/release/linux-amd64/mc
+    dest: /usr/local/bin/mc
+    mode: '0777'
+    owner: root
+    group: root
+

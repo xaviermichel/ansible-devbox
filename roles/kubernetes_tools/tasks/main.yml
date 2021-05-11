@@ -90,3 +90,14 @@
     package_release_format: ''
     package_is_archive: false
 
+- name: Install pluto
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: pluto
+    package_binary: pluto
+    package_overwrite_existing: "{{ pluto_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ pluto_version | default(k8s_tools_version) }}"
+    package_repository: FairwindsOps/pluto
+    package_release_filename: 'pluto_@VERSION_linux_amd64'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+

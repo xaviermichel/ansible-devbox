@@ -20,9 +20,18 @@
       shell: echo "{{ package_latest_version.stdout | default(package_version) }}" {{ package_version_mutation | default('') }}
       register: package_to_install_file_version
       changed_when: false
+    - name: compute github url
+      shell: echo 'https://github.com/{{ package_repository }}/releases/download/{{ package_to_install_version.stdout }}/{{ package_release_filename | replace("@VERSION", package_to_install_file_version.stdout) }}{{ package_release_format | default(".tar.gz") }}'
+      register: github_download_url
+      changed_when: false
+    - name: compute custom download url
+      shell: echo '{{ package_overwrite_url | replace("@VERSION", package_to_install_file_version.stdout)}}'
+      register: custom_download_url
+      changed_when: false
+      when: package_overwrite_url is defined
     - name: download
       get_url:
-        url: 'https://github.com/{{ package_repository }}/releases/download/{{ package_to_install_version.stdout }}/{{ package_release_filename | replace("@VERSION", package_to_install_file_version.stdout) }}{{ package_release_format | default(".tar.gz") }}'
+        url: "{{ custom_download_url.stdout | default(github_download_url.stdout) }}"
         dest: '/tmp/{{ package_binary }}{{ package_release_format | default(".tar.gz") }}'
         mode: '0644'
     - name: remove old version
@@ -41,6 +50,7 @@
           - README.md
           - LICENCE
           - CHANGELOG.md
+        extra_opts: '{{ package_unarchive_extra_opts | default([]) }}'
       when: package_is_archive | default(true)
     - name: copy if not archive
       copy:
@@ -51,6 +61,9 @@
         mode: '0777'
         remote_src: true
       when: not package_is_archive | default(true)
+    - name: Run post install command
+      shell: "{{ package_post_install_cmd }}"
+      when: package_post_install_cmd is defined
   always:
     - name: cleanup temp files
       file:

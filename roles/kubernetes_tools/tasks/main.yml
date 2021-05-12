@@ -101,3 +101,37 @@
     package_release_filename: 'pluto_@VERSION_linux_amd64'
     package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
 
+- name: Install minikube
+  get_url:
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    force: "{{ minikube_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: Install helm
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: helm
+    package_binary: helm
+    package_overwrite_existing: "{{ helm_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ helm_version | default(k8s_tools_version) }}"
+    package_repository: helm/helm
+    package_release_filename: 'helm-@VERSION-linux-amd64'
+    package_overwrite_url: https://get.helm.sh/helm-@VERSION-linux-amd64.tar.gz
+    package_unarchive_extra_opts: [--strip-components=1]
+
+- name: Install helmfile
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: helmfile
+    package_binary: helmfile
+    package_overwrite_existing: "{{ helmfile_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ helmfile_version | default(k8s_tools_version) }}"
+    package_repository: roboll/helmfile
+    package_release_filename: helmfile_linux_amd64
+    package_release_format: ''
+    package_is_archive: false
+    package_post_install_cmd: "helm plugin install https://github.com/databus23/helm-diff"
+

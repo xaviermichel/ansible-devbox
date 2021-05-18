@@ -23,3 +23,15 @@
     owner: root
     group: root
 
+- name: Install dive
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: dive
+    package_binary: dive
+    package_overwrite_existing: "{{ dive_overwrite_existing | default(development_tools_overwrite_existing) }}"
+    package_version: "{{ dive_version | default(development_tools_version) }}"
+    package_repository: wagoodman/dive
+    package_release_filename: 'dive_@VERSION_linux_amd64'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+
+

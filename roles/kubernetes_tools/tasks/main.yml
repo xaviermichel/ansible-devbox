@@ -135,3 +135,15 @@
     package_is_archive: false
     package_post_install_cmd: "helm plugin install https://github.com/databus23/helm-diff"
 
+- name: Install k3d
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: k3d
+    package_binary: k3d
+    package_overwrite_existing: "{{ k3d_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ k3d_version | default(k8s_tools_version) }}"
+    package_repository: rancher/k3d
+    package_release_filename: k3d-linux-amd64
+    package_release_format: ''
+    package_is_archive: false
+

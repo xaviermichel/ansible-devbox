@@ -33,6 +33,7 @@
 - hosts: commons_ui
   tags:
     - base
+    - baseui
   become: yes
   roles:
     - name: base_ui

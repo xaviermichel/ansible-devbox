@@ -133,7 +133,7 @@
     package_release_filename: helmfile_linux_amd64
     package_release_format: ''
     package_is_archive: false
-    package_post_install_cmd: "helm plugin install https://github.com/databus23/helm-diff"
+    package_post_install_cmd: "helm plugin install https://github.com/databus23/helm-diff || true"
 
 - name: Install k3d
   include_tasks: ../../commons/tasks/get_github_binary.yml
@@ -144,6 +144,18 @@
     package_version: "{{ k3d_version | default(k8s_tools_version) }}"
     package_repository: rancher/k3d
     package_release_filename: k3d-linux-amd64
+    package_release_format: ''
+    package_is_archive: false
+
+- name: Install kbld
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: kbld
+    package_binary: kbld
+    package_overwrite_existing: "{{ kbld_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ kbld_version | default(k8s_tools_version) }}"
+    package_repository: vmware-tanzu/carvel-kbld
+    package_release_filename: kbld-linux-amd64
     package_release_format: ''
     package_is_archive: false
 

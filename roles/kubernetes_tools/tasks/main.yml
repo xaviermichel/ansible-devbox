@@ -159,3 +159,15 @@
     package_release_format: ''
     package_is_archive: false
 
+- name: Install vendir
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: vendir
+    package_binary: vendir
+    package_overwrite_existing: "{{ kbld_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ kbld_version | default(k8s_tools_version) }}"
+    package_repository: vmware-tanzu/carvel-vendir
+    package_release_filename: vendir-linux-amd64
+    package_release_format: ''
+    package_is_archive: false
+

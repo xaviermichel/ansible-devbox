@@ -182,3 +182,14 @@
     package_release_filename: 'trivy_@VERSION_Linux-64bit'
     package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
 
+- name: Install kubeaudit
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: kubeaudit
+    package_binary: kubeaudit
+    package_overwrite_existing: "{{ kubeaudit_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ kubeaudit_version | default(k8s_tools_version) }}"
+    package_repository: Shopify/kubeaudit
+    package_release_filename: 'kubeaudit_@VERSION_linux_amd64'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+

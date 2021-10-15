@@ -171,3 +171,14 @@
     package_release_format: ''
     package_is_archive: false
 
+- name: Install trivy
+  include_tasks: ../../commons/tasks/get_github_binary.yml
+  vars:
+    package_name: trivy
+    package_binary: trivy
+    package_overwrite_existing: "{{ trivy_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
+    package_version: "{{ trivy_version | default(k8s_tools_version) }}"
+    package_repository: aquasecurity/trivy
+    package_release_filename: 'trivy_@VERSION_Linux-64bit'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+

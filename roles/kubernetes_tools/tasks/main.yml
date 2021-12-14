@@ -62,10 +62,10 @@
     package_binary: stern
     package_overwrite_existing: "{{ stern_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
     package_version: "{{ stern_version | default(k8s_tools_version) }}"
-    package_repository: wercker/stern
-    package_release_filename: 'stern_linux_amd64'
-    package_release_format: ''
-    package_is_archive: false
+    package_repository: stern/stern
+    package_release_filename: 'stern_@VERSION_linux_amd64'
+    package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
+    package_unarchive_extra_opts: [--strip-components=1]
 
 - name: Install tkn
   include_tasks: ../../commons/tasks/get_github_binary.yml

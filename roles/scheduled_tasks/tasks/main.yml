@@ -18,3 +18,8 @@
     - { task: 'monitoring', file: 'monitoring.sh', cron_hour: '*/6', cron_min: '0' }
     - { task: 'web_checker', file: 'web_checker.sh', cron_hour: '8-22', cron_min: '0', cron_disabled: no}
 
+- name: Deploy simple tasks
+  include_tasks: deploy_simple_task.yml
+  with_items:
+    - { task: 'nextcloud_webcron', cron_min: '*/5', job: 'curl http://127.0.0.1:8020/cron.php'}
+

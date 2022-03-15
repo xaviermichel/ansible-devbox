@@ -1,0 +1,9 @@
+- name: Add cron execution for {{ item.task }}
+  cron:
+    name: "run {{ item.task }}"
+    weekday: "{{ item.cron_weekday | default('*') }}"
+    hour: "{{ item.cron_hour | default('*') }}"
+    minute: "{{ item.cron_min | default('*') }}"
+    job: "{{ item.job }}"
+    user: "{{ user }}"
+

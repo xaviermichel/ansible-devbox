@@ -62,6 +62,11 @@
   register:
     ssh_config
 
+- name: Ensures that byobu dir exists
+  file:
+    path: /home/{{ user }}/.byobu
+    state: directory
+
 - name: Copy byobu configuration
   copy:
     src: "/home/{{ user }}/.dotfiles/bybou/tmux.conf"

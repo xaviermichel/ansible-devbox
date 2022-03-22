@@ -65,7 +65,6 @@
     package_repository: stern/stern
     package_release_filename: 'stern_@VERSION_linux_amd64'
     package_version_mutation: '| sed "s/^v\(.*\)/\1/"'
-    package_unarchive_extra_opts: [--strip-components=1]
 
 - name: Install tkn
   include_tasks: ../../commons/tasks/get_github_binary.yml
@@ -142,7 +141,7 @@
     package_binary: k3d
     package_overwrite_existing: "{{ k3d_overwrite_existing | default(k8s_tools_overwrite_existing) }}"
     package_version: "{{ k3d_version | default(k8s_tools_version) }}"
-    package_repository: rancher/k3d
+    package_repository: k3d-io/k3d
     package_release_filename: k3d-linux-amd64
     package_release_format: ''
     package_is_archive: false

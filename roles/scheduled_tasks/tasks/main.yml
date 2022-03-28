@@ -21,5 +21,5 @@
 - name: Deploy simple tasks
   include_tasks: deploy_simple_task.yml
   with_items:
-    - { task: 'nextcloud_webcron', cron_min: '*/5', job: 'curl http://127.0.0.1:8020/cron.php'}
+    - { task: 'nextcloud_webcron', cron_min: '*/5', job: 'curl -so /dev/null http://127.0.0.1:8020/cron.php'}
 

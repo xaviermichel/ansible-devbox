@@ -18,8 +18,9 @@
     - { task: 'monitoring', file: 'monitoring.sh', cron_hour: '*/6', cron_min: '0' }
     - { task: 'web_checker', file: 'web_checker.sh', cron_hour: '8-22', cron_min: '0', cron_disabled: no}
 
-- name: Deploy simple tasks
+- name: Nextcloud tasks
   include_tasks: deploy_simple_task.yml
   with_items:
-    - { task: 'nextcloud_webcron', cron_min: '*/5', job: 'curl -so /dev/null http://127.0.0.1:8020/cron.php'}
+    - { task: 'nextcloud_webcron', cron_min: '*/5', job: 'docker exec --user www-data nextcloud_nextcloud_1 php -f /var/www/html/cron.php'}
+    - { task: 'nextcloud_face_recognition', disabled: 'yes', cron_hour: '4', cron_min: '0', job: 'docker exec --user www-data nextcloud_nextcloud_1 ./occ face:background_job >/dev/null 2>&1'}
 

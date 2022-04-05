@@ -1,5 +1,6 @@
 - name: Add cron execution for {{ item.task }}
   cron:
+    disabled: "{{ item.disabled | default('no') }}"
     name: "run {{ item.task }}"
     weekday: "{{ item.cron_weekday | default('*') }}"
     hour: "{{ item.cron_hour | default('*') }}"

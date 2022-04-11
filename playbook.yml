@@ -76,6 +76,8 @@
     - name: nvm
       tags: ['nvm']
       become_user: "{{ user }}"
+    - name: comcast.sdkman
+      tags: ['sdkman']
   environment:
     - "{{ proxy_env | default ({}) }}"
 

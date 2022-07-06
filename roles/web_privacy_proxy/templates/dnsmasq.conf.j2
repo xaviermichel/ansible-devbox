@@ -4,10 +4,10 @@ domain-needed
 #conf-file=/etc/dnsmasq/domains.txt
 
 {% if duckdns is defined %}
-address=/{{ duckdns.domains }}.duckdns.org/{{ vpn_ip_address }}
+address=/{{ duckdns.domains }}.duckdns.org/{{ vpn_ip_address.split('/') | first }}
 {% endif %}
 {% if hostname is defined and local_ip_address is defined %}
-address=/{{ hostname }}/{{ local_ip_address }}
+address=/{{ hostname }}/{{ local_ip_address.split('/') | first }}
 {% endif %}
 addn-hosts=/etc/dnsmasq/blacklist.txt
 

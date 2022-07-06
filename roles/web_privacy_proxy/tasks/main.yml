@@ -72,7 +72,7 @@
     table: filter
     chain: "{{ item }}"
     in_interface: tun0
-    destination: "192.168.1.0/24"
+    destination: "{{ local_ip_address }}"
     jump: REJECT
   with_items:
     - INPUT
@@ -85,8 +85,8 @@
     protocol: tcp
     chain: PREROUTING
     in_interface: tun0
-    source: "!10.18.0.1"
-    destination: "!10.18.0.1/24"
+    source: "!{{ vpn_ip_address.split('/') | first }}"
+    destination: "!{{ vpn_ip_address }}"
     jump: REDIRECT
     destination_port: "80"
     to_ports: "31281"
@@ -98,8 +98,8 @@
     protocol: tcp
     chain: PREROUTING
     in_interface: tun0
-    source: "!10.18.0.1"
-    destination: "!10.18.0.1/24"
+    source: "!{{ vpn_ip_address.split('/') | first }}"
+    destination: "!{{ vpn_ip_address }}"
     jump: REDIRECT
     to_ports: "31282"
   notify: iptables save

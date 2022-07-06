@@ -36,10 +36,10 @@
     state: present
     update_cache: yes
 
-- name: Install snap packages
-  snap:
-    name:
-      - yq
+#- name: Install snap packages
+#  snap:
+#    name:
+#      - yq
 
 - name: Disable ssh for root user
   lineinfile:

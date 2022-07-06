@@ -6,7 +6,7 @@ tls_trust_file /etc/ssl/certs/ca-certificates.crt
 logfile        ~/.msmtp.log
 
 account        default
-host           smtp.gmail.com
+host           {{ smtp.host }}
 port           587
 from           {{ smtp.username }}
 user           {{ smtp.username }}

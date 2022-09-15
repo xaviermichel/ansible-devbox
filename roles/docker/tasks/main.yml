@@ -29,7 +29,7 @@
 
 - name: Install docker
   apt:
-    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose']
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose-plugin']
     state: present
 
 - name: Adding user {{ user }} to group docker

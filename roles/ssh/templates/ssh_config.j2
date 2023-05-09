@@ -30,10 +30,10 @@ Host {{ server }}
     {%- if serverGroupValue.user is defined %}
     User {{ serverGroupValue.user }}
     {%- endif %}
-    {%- if serverGroupValue.key is defined %}
-    IdentityFile ~/.ssh/{{ serverGroupValue.key }}
+    {%- if serverGroupValue.servers[server].key is defined or serverGroupValue.key is defined %}
+    IdentityFile ~/.ssh/{{ serverGroupValue.servers[server].key | default(serverGroupValue.key) }}
     {%- endif %}
-    {%- if serverGroupValue.proxy_command is defined %}
+    {%- if rverGroupValue.proxy_command is defined %}
     ProxyCommand {{ serverGroupValue.proxy_command }}
     {%- endif %}
     {%- if serverGroupValue.forward_agent is defined %}

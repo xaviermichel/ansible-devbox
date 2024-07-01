@@ -8,7 +8,6 @@
     - name: get latest version
       shell:
         cmd: curl --silent "https://api.github.com/repos/{{ package_repository }}/releases/latest" | jq -r .tag_name
-        warn: false
       register: package_latest_version
       changed_when: false
       when: package_version == 'latest'

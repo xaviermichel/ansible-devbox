@@ -1,7 +1,5 @@
-- name: oefenweb.chrome
-  version: v1.0.38
 - name: gantsign.visual-studio-code
-  version: 6.6.0
+  version: 7.0.0
 - name: comcast.sdkman
   version: 1.7.0
 

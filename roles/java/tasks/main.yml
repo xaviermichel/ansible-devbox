@@ -1,9 +1,0 @@
-- name: Install requirements and tools packages
-  apt:
-    name:
-      - openjdk-11-jdk
-      - maven
-    state: present
-  become: yes
-  become_user: root
-

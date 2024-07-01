@@ -38,10 +38,6 @@
   roles:
     - name: base_ui
       tags: ['apt']
-    - name: oefenweb.chrome
-      tags: ['chrome']
-    - name: intellij
-      tags: ['intellij']
     - name: gantsign.visual-studio-code
       tags: ['vscode']
   environment:
@@ -69,8 +65,6 @@
   roles:
     - name: docker
       tags: ['docker']
-    - name: java
-      tags: ['java']
     - name: developement_tools
       tags: ['developement_tools']
     - name: nvm
